@@ -6,7 +6,7 @@ import {
   MetaFunction,
   Outlet,
   Scripts,
-  ScrollRestoration
+  ScrollRestoration,
 } from "remix";
 import tailwind from "~/tailwind.css";
 
@@ -15,10 +15,8 @@ export const meta: MetaFunction = () => {
 };
 
 export const links: LinksFunction = () => {
-  return [
-    { rel: "stylesheet", href: tailwind },
-  ]
-}
+  return [{ rel: "stylesheet", href: tailwind }];
+};
 
 export default function App() {
   return (
