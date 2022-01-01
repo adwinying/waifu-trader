@@ -10,7 +10,8 @@
     "dev:css": "tailwindcss -o ./app/tailwind.css --watch",
     "postinstall": "remix setup node",
     "start": "remix-serve build",
-    "lint": "eslint \"app/**/*.{js,jsx,ts,tsx}\""
+    "lint": "eslint \"app/**/*.{js,jsx,ts,tsx}\"",
+    "ts-check": "tsc --noEmit --project tsconfig.json"
   },
   "dependencies": {
     "@remix-run/react": "^1.1.1",
