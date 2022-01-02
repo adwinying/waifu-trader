@@ -8,6 +8,7 @@ export default function Index() {
             target="_blank"
             href="https://remix.run/tutorials/blog"
             rel="noreferrer"
+            className="link"
           >
             15m Quickstart Blog Tutorial
           </a>
@@ -17,12 +18,18 @@ export default function Index() {
             target="_blank"
             href="https://remix.run/tutorials/jokes"
             rel="noreferrer"
+            className="link"
           >
             Deep Dive Jokes App Tutorial
           </a>
         </li>
         <li>
-          <a target="_blank" href="https://remix.run/docs" rel="noreferrer">
+          <a
+            target="_blank"
+            href="https://remix.run/docs"
+            rel="noreferrer"
+            className="link"
+          >
             Remix Docs
           </a>
         </li>
