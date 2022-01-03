@@ -11,7 +11,7 @@ import {
 import tailwind from "~/tailwind.css";
 
 export const meta: MetaFunction = () => {
-  return { title: "New Remix App" };
+  return { title: "Waifu Trader" };
 };
 
 export const links: LinksFunction = () => {
