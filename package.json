@@ -10,8 +10,9 @@
     "dev:css": "tailwindcss -o ./app/tailwind.css --watch",
     "postinstall": "remix setup node",
     "start": "remix-serve build",
-    "lint": "eslint \"app/**/*.{js,jsx,ts,tsx}\"",
+    "lint": "eslint \"{app,prisma,test}/**/*.{js,jsx,ts,tsx}\"",
     "ts-check": "tsc --noEmit --project tsconfig.json",
+    "test": "jest",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -19,12 +20,14 @@
     "@remix-run/react": "^1.1.1",
     "@remix-run/serve": "^1.1.1",
     "daisyui": "^1.21.0",
+    "jest-mock-extended": "^2.0.4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "remix": "^1.1.1"
   },
   "devDependencies": {
     "@remix-run/dev": "^1.1.1",
+    "@types/jest": "^27.4.0",
     "@types/react": "^17.0.24",
     "@types/react-dom": "^17.0.9",
     "@typescript-eslint/eslint-plugin": "^5.8.1",
@@ -41,11 +44,13 @@
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0",
     "husky": "^7.0.4",
+    "jest": "^27.4.5",
     "lint-staged": "^12.1.4",
     "prettier": "2.5.1",
     "prisma": "^3.7.0",
     "tailwindcss": "^3.0.8",
-    "typescript": "^4.1.2"
+    "ts-jest": "^27.1.2",
+    "typescript": "^4.5.4"
   },
   "engines": {
     "node": ">=14"

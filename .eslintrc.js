@@ -2,6 +2,7 @@ module.exports = {
   env: {
     browser: true,
     es2021: true,
+    jest: true,
   },
   extends: [
     "plugin:react/recommended",
@@ -25,6 +26,17 @@ module.exports = {
       "error",
       {
         extensions: [".js", ".jsx", ".ts", ".tsx"],
+      },
+    ],
+    // omit ts/tsx extensions from import statements
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        js: "never",
+        jsx: "never",
+        ts: "never",
+        tsx: "never",
       },
     ],
   },

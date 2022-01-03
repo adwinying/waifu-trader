@@ -22,6 +22,6 @@ if (process.env.NODE_ENV === "production") {
   client = global.__db;
 }
 
-export const db = client;
+const db = client;
 
-export default null;
+export default db;
