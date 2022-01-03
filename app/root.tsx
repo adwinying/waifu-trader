@@ -9,6 +9,7 @@ import {
   ScrollRestoration,
 } from "remix";
 import tailwind from "~/tailwind.css";
+import Header from "~/components/Header";
 
 export const meta: MetaFunction = () => {
   return { title: "Waifu Trader" };
@@ -28,7 +29,10 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Outlet />
+        <Header />
+        <div className="container mx-auto px-4">
+          <Outlet />
+        </div>
         <ScrollRestoration />
         <Scripts />
         {process.env.NODE_ENV === "development" && <LiveReload />}
