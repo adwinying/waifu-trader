@@ -39,6 +39,17 @@ module.exports = {
         tsx: "never",
       },
     ],
+    // override label-control association settings
+    "jsx-a11y/label-has-associated-control": [
+      "error",
+      {
+        labelComponents: ["CustomLabel"],
+        labelAttributes: ["inputLabel"],
+        controlComponents: ["CustomInput"],
+        assert: "either",
+        depth: 3,
+      },
+    ],
   },
   settings: {
     "import/resolver": {
