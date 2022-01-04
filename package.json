@@ -13,6 +13,7 @@
     "lint": "eslint \"{app,prisma,test}/**/*.{js,jsx,ts,tsx}\"",
     "ts-check": "tsc --noEmit --project tsconfig.json",
     "test": "jest",
+    "test:coverage": "jest --coverage",
     "prepare": "husky install"
   },
   "dependencies": {
