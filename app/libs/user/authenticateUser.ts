@@ -13,8 +13,14 @@ export default async function authenticateUser({
   const user = await db.user.findFirst({ where: { email } });
 
   if (!user) {
-    return false;
+    return null;
   }
 
-  return bcrypt.compare(password, user.password);
+  const isPasswordMatch = await bcrypt.compare(password, user.password);
+
+  if (!isPasswordMatch) {
+    return null;
+  }
+
+  return user;
 }

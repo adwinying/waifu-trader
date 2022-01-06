@@ -8,13 +8,13 @@ describe("authenticateUser", () => {
     password: "123456",
   };
 
-  test("should return false if user not found", async () => {
+  test("should return null if user not found", async () => {
     prismaMock.user.findFirst.mockResolvedValue(null);
 
-    await expect(authenticateUser(input)).resolves.toBe(false);
+    await expect(authenticateUser(input)).resolves.toBe(null);
   });
 
-  test("should return false if password does not match", async () => {
+  test("should return null if password does not match", async () => {
     const expected = {
       id: "asdf-qwer-1234-5678",
       name: "John Doe",
@@ -26,7 +26,7 @@ describe("authenticateUser", () => {
 
     prismaMock.user.findFirst.mockResolvedValue(expected);
 
-    await expect(authenticateUser(input)).resolves.toBe(false);
+    await expect(authenticateUser(input)).resolves.toBe(null);
   });
 
   test("should return true if password match", async () => {
@@ -41,6 +41,6 @@ describe("authenticateUser", () => {
 
     prismaMock.user.findFirst.mockResolvedValue(expected);
 
-    await expect(authenticateUser(input)).resolves.toBe(true);
+    await expect(authenticateUser(input)).resolves.toBe(expected);
   });
 });
