@@ -11,13 +11,16 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "remix";
+import { User } from "@prisma/client";
 import tailwind from "~/tailwind.css";
 import Header from "~/components/Header";
 import Notification, { NotificationData } from "~/components/Notification";
 import { commitSession, getSession } from "./utils/session.server";
+import { getAuthUser } from "./utils/auth.server";
 
 type LoaderData = {
   notification?: NotificationData;
+  user?: Omit<User, "password" | "createdAt" | "updatedAt">;
 };
 
 export const meta: MetaFunction = () => {
@@ -34,9 +37,15 @@ export const loader: LoaderFunction = async ({ request }) => {
   const notification: NotificationData | undefined =
     session.get("notification");
 
+  const user = (await getAuthUser(request)) ?? undefined;
+
   return json<LoaderData>(
     {
       notification,
+      user:
+        user === undefined
+          ? undefined
+          : { id: user.id, name: user.name, email: user.email },
     },
     {
       headers: {
@@ -47,7 +56,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export default function App() {
-  const { notification } = useLoaderData<LoaderData>();
+  const { notification, user } = useLoaderData<LoaderData>();
 
   return (
     <html lang="en" data-theme="cupcake">
@@ -58,7 +67,7 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Header />
+        <Header userName={user?.name} />
         <div className="container mx-auto px-4">
           {notification && <Notification notification={notification} />}
           <Outlet />
