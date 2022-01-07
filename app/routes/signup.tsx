@@ -22,7 +22,7 @@ export const validationSchema = z
         });
 
         return existingUserWithEmail === null;
-      }),
+      }, "Email already in use"),
     password: z.string().min(8),
     passwordConfirmation: z.string().min(8),
   })
