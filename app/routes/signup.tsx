@@ -9,6 +9,9 @@ import { z } from "zod";
 import { RefreshIcon } from "@heroicons/react/outline";
 import FormText from "~/components/FormText";
 import db from "~/utils/db.server";
+import registerUser from "~/libs/user/registerUser";
+import { commitSession } from "~/utils/session.server";
+import { createUserSession } from "~/utils/auth.server";
 
 export const validationSchema = z
   .object({
@@ -45,7 +48,20 @@ export const action: ActionFunction = async ({ request }) => {
     return { errors: validation.error.flatten().fieldErrors, data };
   }
 
-  return redirect("/");
+  const user = await registerUser(validation.data);
+
+  const session = await createUserSession(user);
+
+  session.flash("notification", {
+    type: "success",
+    message: "You have successfully signed up!",
+  });
+
+  return redirect("/", {
+    headers: {
+      "Set-Cookie": await commitSession(session),
+    },
+  });
 };
 
 export default function SignUpRoute() {
