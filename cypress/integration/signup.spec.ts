@@ -5,7 +5,6 @@ describe("signup", () => {
   });
 
   it("should show required fields", () => {
-    cy.setupDb();
     cy.visit("/signup");
     cy.get('button[type="submit"]').click();
     cy.get('label[for="name-error"]').should(
@@ -28,6 +27,7 @@ describe("signup", () => {
     const email = "test@example.org";
     const password = "hashed_password";
 
+    cy.setupDb();
     cy.seedDb({ user: [{ name, email, password }] });
 
     cy.visit("/signup");
@@ -42,7 +42,6 @@ describe("signup", () => {
   it("should show error when password confirmation does not match", () => {
     const password = "password";
 
-    cy.setupDb();
     cy.visit("/signup");
     cy.get('input[name="password"]').type(password);
     cy.get('input[name="passwordConfirmation"]').type(`${password}1`);
@@ -72,5 +71,13 @@ describe("signup", () => {
       "You have successfully signed up!",
     );
     cy.get('[cy-data="header-user-name"]').should("contain.text", name);
+  });
+
+  it("should redirect to home page if authenticated", () => {
+    cy.setupDb();
+    cy.login({ email: "test@example.org" });
+    cy.visit("/signup");
+
+    cy.url().should("eq", `${Cypress.config().baseUrl}/`);
   });
 });

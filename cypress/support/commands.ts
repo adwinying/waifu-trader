@@ -1,4 +1,5 @@
 import { SeedDataInput, SeedDataOutput } from "../../app/types/SeedData";
+import { TestAuthData } from "../../app/types/TestAuthData";
 
 // ***********************************************
 // This example commands.js shows you how to
@@ -22,6 +23,10 @@ function seedDb(data: SeedDataInput) {
     .then((res) => res.body as SeedDataOutput);
 }
 
+function login(data: TestAuthData) {
+  cy.request("POST", "__test/login", data);
+}
+
 declare global {
   namespace Cypress {
     interface Chainable {
@@ -40,12 +45,21 @@ declare global {
        * @example cy.seedDb({ user: [{ name: "John Doe", email: "john@gmail.com", password: "hashed_pass" }] })
        */
       seedDb: typeof seedDb;
+
+      /**
+       * Login as the given user.
+       * @returns {typeof login}
+       * @memberof Chainable
+       * @example cy.login({ email: "test@example.org", name: "John Doe" })
+       */
+      login: typeof login;
     }
   }
 }
 
 Cypress.Commands.add("setupDb", setupDb);
 Cypress.Commands.add("seedDb", seedDb);
+Cypress.Commands.add("login", login);
 
 export {};
 

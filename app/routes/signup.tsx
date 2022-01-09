@@ -1,6 +1,7 @@
 import {
   ActionFunction,
   Form,
+  LoaderFunction,
   redirect,
   useActionData,
   useTransition,
@@ -10,7 +11,7 @@ import { RefreshIcon } from "@heroicons/react/outline";
 import db from "~/utils/db.server";
 import registerUser from "~/libs/user/registerUser";
 import { commitSession } from "~/utils/session.server";
-import { createUserSession } from "~/utils/auth.server";
+import { createUserSession, getAuthUser } from "~/utils/auth.server";
 import FormText from "~/components/FormText";
 import PageTitle from "~/components/PageTitle";
 
@@ -63,6 +64,14 @@ export const action: ActionFunction = async ({ request }) => {
       "Set-Cookie": await commitSession(session),
     },
   });
+};
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const user = await getAuthUser(request);
+
+  if (user) return redirect("/");
+
+  return {};
 };
 
 export default function SignUpRoute() {
