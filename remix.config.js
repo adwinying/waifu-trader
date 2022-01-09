@@ -17,12 +17,12 @@ module.exports = {
       if (process.env.NODE_ENV === "production") return;
       if (process.env.TEST_ROUTES_ENABLED !== "true") return;
 
-      const files = fs.readdirSync(path.join(__dirname, "app/routes/__test"));
+      const files = fs.readdirSync(path.join(__dirname, "app/routes/_test"));
 
       files.forEach((fileName) => {
         const routePath = fileName.replace(".tsx", "");
 
-        route(`__test/${routePath}`, `routes/__test/${fileName}`);
+        route(`_test/${routePath}`, `routes/_test/${fileName}`);
       });
     });
   },

@@ -19,12 +19,12 @@ function setupDb() {
 
 function seedDb(data: SeedDataInput) {
   return cy
-    .request("POST", "__test/seed", data)
+    .request("POST", "_test/seed", data)
     .then((res) => res.body as SeedDataOutput);
 }
 
 function login(data: TestAuthData) {
-  cy.request("POST", "__test/login", data);
+  cy.request("POST", "_test/login", data);
 }
 
 declare global {
