@@ -1,3 +1,5 @@
+import { SeedDataInput, SeedDataOutput } from "../../app/types/SeedData";
+
 // ***********************************************
 // This example commands.js shows you how to
 // create various custom commands and overwrite
@@ -14,6 +16,12 @@ function setupDb() {
   );
 }
 
+function seedDb(data: SeedDataInput) {
+  return cy
+    .request("POST", "__test/seed", data)
+    .then((res) => res.body as SeedDataOutput);
+}
+
 declare global {
   namespace Cypress {
     interface Chainable {
@@ -24,11 +32,20 @@ declare global {
        * @example cy.setupDb()
        */
       setupDb: typeof setupDb;
+
+      /**
+       * Seed the database with the given data.
+       * @returns {typeof seedDb}
+       * @memberof Chainable
+       * @example cy.seedDb({ user: [{ name: "John Doe", email: "john@gmail.com", password: "hashed_pass" }] })
+       */
+      seedDb: typeof seedDb;
     }
   }
 }
 
 Cypress.Commands.add("setupDb", setupDb);
+Cypress.Commands.add("seedDb", seedDb);
 
 export {};
 
