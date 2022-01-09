@@ -7,11 +7,12 @@ import {
 } from "remix";
 import { z } from "zod";
 import { RefreshIcon } from "@heroicons/react/outline";
-import FormText from "~/components/FormText";
 import db from "~/utils/db.server";
 import registerUser from "~/libs/user/registerUser";
 import { commitSession } from "~/utils/session.server";
 import { createUserSession } from "~/utils/auth.server";
+import FormText from "~/components/FormText";
+import PageTitle from "~/components/PageTitle";
 
 export const validationSchema = z
   .object({
@@ -70,7 +71,7 @@ export default function SignUpRoute() {
 
   return (
     <div>
-      <h1 className="mb-6 text-5xl font-bold">Sign Up</h1>
+      <PageTitle>Sign Up</PageTitle>
 
       <Form method="post" className="w-full sm:w-80">
         <FormText
