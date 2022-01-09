@@ -21,7 +21,7 @@ export default function Header({ userName }: Props) {
           {isLoggedIn ? (
             <Link to="/settings" className="hover:opacity-80">
               <UserCircleIcon className="inline w-8 mr-1" />
-              {userName}
+              <span cy-data="header-user-name">{userName}</span>
             </Link>
           ) : (
             <>

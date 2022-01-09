@@ -41,9 +41,12 @@ function Notification({ notification }: Props) {
       <div className="flex-1">
         <Icon className="flex-shrink-0 w-6 h-6 mx-2" />
         <label>
-          <h4>{notification.message}</h4>
+          <h4 cy-data="notification-title">{notification.message}</h4>
           {notification.detail && (
-            <p className="text-sm text-base-content text-opacity-60">
+            <p
+              className="text-sm text-base-content text-opacity-60"
+              cy-data="notification-detail"
+            >
               {notification.detail}
             </p>
           )}
