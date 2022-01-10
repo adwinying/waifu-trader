@@ -15,6 +15,7 @@
     "test": "jest",
     "test:coverage": "jest --coverage",
     "test:server": "node -r dotenv/config node_modules/.bin/remix-serve build dotenv_config_path=.env.test",
+    "test:seed": "node -r dotenv/config node_modules/.bin/prisma migrate dev dotenv_config_path=.env.test && cp ./prisma/test.db ./prisma/test.db.bak",
     "cypress:open": "start-server-and-test test:server 3002 'cypress open'",
     "prepare": "husky install"
   },

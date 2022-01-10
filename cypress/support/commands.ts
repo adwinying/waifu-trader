@@ -12,9 +12,7 @@ import { TestAuthData } from "../../app/types/TestAuthData";
 // ***********************************************
 
 function setupDb() {
-  cy.exec(
-    "node -r dotenv/config node_modules/.bin/prisma migrate reset --force dotenv_config_path=.env.test",
-  );
+  cy.exec("cp ./prisma/test.db.bak ./prisma/test.db");
 }
 
 function seedDb(data: SeedDataInput) {
