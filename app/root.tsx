@@ -1,5 +1,6 @@
 import {
   json,
+  Link,
   Links,
   LinksFunction,
   LiveReload,
@@ -9,14 +10,17 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useCatch,
   useLoaderData,
 } from "remix";
 import { User } from "@prisma/client";
+import { ReactNode } from "react";
 import tailwind from "~/tailwind.css";
 import Header from "~/components/Header";
 import Notification, { NotificationData } from "~/components/Notification";
 import { commitSession, getSession } from "./utils/session.server";
 import { getAuthUser } from "./utils/auth.server";
+import PageTitle from "./components/PageTitle";
 
 type LoaderData = {
   notification?: NotificationData;
@@ -55,8 +59,11 @@ export const loader: LoaderFunction = async ({ request }) => {
   );
 };
 
-export default function App() {
-  const { notification, user } = useLoaderData<LoaderData>();
+type LayoutProps = {
+  children: ReactNode;
+};
+function Layout({ children }: LayoutProps) {
+  const { notification, user } = useLoaderData<LoaderData>() ?? {};
 
   return (
     <html lang="en" data-theme="cupcake">
@@ -70,12 +77,62 @@ export default function App() {
         <Header userName={user?.name} />
         <div className="container mx-auto px-4">
           {notification && <Notification notification={notification} />}
-          <Outlet />
+          {children}
         </div>
         <ScrollRestoration />
         <Scripts />
         {process.env.NODE_ENV === "development" && <LiveReload />}
       </body>
     </html>
+  );
+}
+
+type ErrorBoundaryProps = {
+  error: Error;
+};
+export function ErrorBoundary({ error }: ErrorBoundaryProps) {
+  // eslint-disable-next-line no-console
+  console.error(error);
+
+  return (
+    <Layout>
+      <PageTitle>Oops, something went wrong!</PageTitle>
+      <p>
+        Try again later, or go back to the{" "}
+        <Link to="/" className="link">
+          home page
+        </Link>
+        .
+      </p>
+    </Layout>
+  );
+}
+
+export function CatchBoundary() {
+  const caught = useCatch();
+
+  if (caught.status !== 404)
+    return <ErrorBoundary error={new Error(JSON.stringify(caught))} />;
+
+  return (
+    <Layout>
+      <PageTitle>404: Not Found</PageTitle>
+      <p>
+        The page you are looking for does not exist. Perhaps you would like to
+        go to the{" "}
+        <Link to="/" className="link">
+          home page
+        </Link>
+        ?
+      </p>
+    </Layout>
+  );
+}
+
+export default function App() {
+  return (
+    <Layout>
+      <Outlet />
+    </Layout>
   );
 }
