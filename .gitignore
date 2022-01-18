@@ -7,4 +7,5 @@ node_modules
 /prisma/dev.db*
 /prisma/test.db*
 /coverage/*
+/cypress/videos/*
 .env

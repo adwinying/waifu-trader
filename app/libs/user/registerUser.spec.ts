@@ -19,6 +19,7 @@ describe("registerUser", () => {
       name: input.name,
       email: input.email,
       password: "hashed_123456",
+      points: 0,
       createdAt: new Date(),
       updatedAt: new Date(),
     };

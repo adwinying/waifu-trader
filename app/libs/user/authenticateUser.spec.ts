@@ -20,6 +20,7 @@ describe("authenticateUser", () => {
       name: "John Doe",
       email: input.email,
       password: "some_hashed_password",
+      points: 0,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -35,6 +36,7 @@ describe("authenticateUser", () => {
       name: "John Doe",
       email: input.email,
       password: await bcrypt.hash(input.password, 10),
+      points: 0,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
