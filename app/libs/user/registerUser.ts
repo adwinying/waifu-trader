@@ -15,12 +15,20 @@ export default async function registerUser({
   name,
 }: RegisterUser) {
   const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+  const initialPoints = 500;
 
-  const data = {
+  const pointHistoryData = {
+    points: initialPoints,
+    reason: "Thanks for signing up!",
+  };
+
+  const userData = {
     email,
     password: hashedPassword,
     name,
+    points: initialPoints,
+    pointHistories: { create: [pointHistoryData] },
   };
 
-  return db.user.create({ data });
+  return db.user.create({ data: userData });
 }

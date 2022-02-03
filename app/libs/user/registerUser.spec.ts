@@ -19,7 +19,7 @@ describe("registerUser", () => {
       name: input.name,
       email: input.email,
       password: "hashed_123456",
-      points: 0,
+      points: 500,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -42,6 +42,15 @@ describe("registerUser", () => {
           (actual: string) => /^\$2a\$10\$.+$/.test(actual),
           "hashed_password",
         ),
+        points: 500,
+        pointHistories: {
+          create: [
+            {
+              points: 500,
+              reason: "Thanks for signing up!",
+            },
+          ],
+        },
       },
     });
   });
