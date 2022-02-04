@@ -1,12 +1,14 @@
 import { UserCircleIcon } from "@heroicons/react/solid";
 import { Link } from "remix";
 import logo from "~/assets/img/logo.jpg";
+import gem from "~/assets/img/gem.svg";
 
 type Props = {
   userName: string | undefined;
+  points: number | undefined;
 };
 
-export default function Header({ userName }: Props) {
+export default function Header({ userName, points }: Props) {
   const isLoggedIn = userName !== undefined;
 
   return (
@@ -19,10 +21,16 @@ export default function Header({ userName }: Props) {
 
         <div className="flex space-x-4 items-center">
           {isLoggedIn ? (
-            <Link to="/settings" className="hover:opacity-80">
-              <UserCircleIcon className="inline w-8 mr-1" />
-              <span cy-data="header-user-name">{userName}</span>
-            </Link>
+            <>
+              <Link to="/points" className="hover:opacity-80">
+                <img src={gem} alt="Gem Icon" className="inline h-6 mr-1" />
+                <span cy-data="header-points">{points?.toLocaleString()}</span>
+              </Link>
+              <Link to="/settings" className="hover:opacity-80">
+                <UserCircleIcon className="inline w-8 mr-1" />
+                <span cy-data="header-user-name">{userName}</span>
+              </Link>
+            </>
           ) : (
             <>
               <Link to="/signup" className="btn btn-primary btn-sm">

@@ -79,7 +79,7 @@ function Layout({ children }: LayoutProps) {
         <Links />
       </head>
       <body>
-        <Header userName={user?.name} />
+        <Header userName={user?.name} points={user?.points} />
         <div className="container mx-auto px-4">
           {notification && <Notification notification={notification} />}
           {children}
