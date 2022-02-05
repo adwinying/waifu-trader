@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import db from "~/utils/db.server";
 import updateUserPoints from "~/libs/user/updateUserPoints";
 
-const SALT_ROUNDS = 10;
+export const SALT_ROUNDS = 10;
 
 export type RegisterUser = {
   email: string;
