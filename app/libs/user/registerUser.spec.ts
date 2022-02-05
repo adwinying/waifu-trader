@@ -1,11 +1,22 @@
-import { User } from "@prisma/client";
+import { User, PointHistory } from "@prisma/client";
 import { Matcher } from "jest-mock-extended";
 import { prismaMock } from "~/../tests/database";
-import registerUser, { RegisterUser } from "./registerUser";
+import registerUser, { RegisterUser } from "~/libs/user/registerUser";
+import updateUserPoints, {
+  UpdateUserPoints,
+} from "~/libs/user/updateUserPoints";
+
+jest.mock("~/libs/user/updateUserPoints");
+const updateUserPointsMock = updateUserPoints as jest.MockedFn<
+  typeof updateUserPoints
+>;
 
 describe("registerUser", () => {
   let input: RegisterUser;
   let expected: User;
+  let newUser: User;
+  let pointHistoryInput: UpdateUserPoints;
+  let newPointHistory: PointHistory;
 
   beforeEach(() => {
     input = {
@@ -24,7 +35,32 @@ describe("registerUser", () => {
       updatedAt: new Date(),
     };
 
-    prismaMock.user.create.mockResolvedValue(expected);
+    newUser = {
+      ...expected,
+      points: 0,
+    };
+
+    pointHistoryInput = {
+      user: newUser,
+      pointChange: 500,
+      reason: "Thanks for signing up!",
+    };
+
+    newPointHistory = {
+      id: "asdf-qwer-1234-5678",
+      userId: newUser.id,
+      points: pointHistoryInput.pointChange,
+      reason: pointHistoryInput.reason,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    prismaMock.user.create.mockResolvedValue(newUser);
+
+    updateUserPointsMock.mockResolvedValue({
+      user: expected,
+      pointHistory: newPointHistory,
+    });
   });
 
   test("should return a user", async () => {
@@ -42,16 +78,13 @@ describe("registerUser", () => {
           (actual: string) => /^\$2a\$10\$.+$/.test(actual),
           "hashed_password",
         ),
-        points: 500,
-        pointHistories: {
-          create: [
-            {
-              points: 500,
-              reason: "Thanks for signing up!",
-            },
-          ],
-        },
       },
     });
+  });
+
+  test("should award user 500 points", async () => {
+    await registerUser(input);
+
+    expect(updateUserPointsMock).toHaveBeenCalledWith(pointHistoryInput);
   });
 });
