@@ -26,7 +26,7 @@ export default function Header({ userName, points }: Props) {
                 <img src={gem} alt="Gem Icon" className="inline h-6 mr-1" />
                 <span cy-data="header-points">{points?.toLocaleString()}</span>
               </Link>
-              <Link to="/settings" className="hover:opacity-80">
+              <Link to="/preferences" className="hover:opacity-80">
                 <UserCircleIcon className="inline w-8 mr-1" />
                 <span cy-data="header-user-name">{userName}</span>
               </Link>
