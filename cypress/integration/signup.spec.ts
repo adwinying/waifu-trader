@@ -56,6 +56,7 @@ describe("signup", () => {
     const name = "Test User";
     const email = "test@example.org";
     const password = "password";
+    const initialPoints = 500;
 
     cy.setupDb();
     cy.visit("/signup");
@@ -71,6 +72,7 @@ describe("signup", () => {
       "You have successfully signed up!",
     );
     cy.get('[cy-data="header-user-name"]').should("contain.text", name);
+    cy.get('[cy-data="header-points"]').should("contain.text", initialPoints);
   });
 
   it("should redirect to home page if authenticated", () => {
