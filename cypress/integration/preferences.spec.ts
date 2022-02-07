@@ -4,8 +4,15 @@ describe("preferences", () => {
   });
 
   it("should redirect to login when unauthenticated", () => {
+    const redirectUrl = `${Cypress.config().baseUrl}/preferences`;
+
     cy.visit("/preferences");
-    cy.url().should("eq", `${Cypress.config().baseUrl}/login`);
+    cy.url().should(
+      "eq",
+      `${Cypress.config().baseUrl}/login?redirect=${encodeURIComponent(
+        redirectUrl,
+      )}`,
+    );
   });
 
   it("should populate name and email text fields", () => {

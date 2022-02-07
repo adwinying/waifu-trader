@@ -32,11 +32,11 @@ describe("login", () => {
     const name = "Test User";
     const email = "test@example.org";
     const password = "secret";
-    const hasedPassword =
+    const hashedPassword =
       "$2y$10$fQ/fazS6NSwUfY7/lauARuiuE/7cZEjrdpuvF4PK6J18Hx14UbLMK";
 
     cy.setupDb();
-    cy.seedDb({ user: [{ name, email, password: hasedPassword }] });
+    cy.seedDb({ user: [{ name, email, password: hashedPassword }] });
 
     cy.visit("/login");
     cy.get('input[name="email"]').type(email);
@@ -44,6 +44,33 @@ describe("login", () => {
     cy.get('button[type="submit"]').click();
 
     cy.url().should("eq", `${Cypress.config().baseUrl}/`);
+    cy.get('[cy-data="notification-title"').should(
+      "contain.text",
+      "You have successfully logged in!",
+    );
+    cy.get('[cy-data="header-user-name"]').should("contain.text", name);
+  });
+
+  it("should redirect to destination after login if redirect query is specified", () => {
+    const name = "Test User";
+    const email = "test@example.org";
+    const password = "secret";
+    const hashedPassword =
+      "$2y$10$fQ/fazS6NSwUfY7/lauARuiuE/7cZEjrdpuvF4PK6J18Hx14UbLMK";
+
+    const redirectUrl = encodeURIComponent(
+      `${Cypress.config().baseUrl}/preferences`,
+    );
+
+    cy.setupDb();
+    cy.seedDb({ user: [{ name, email, password: hashedPassword }] });
+
+    cy.visit(`/login?redirect=${redirectUrl}`);
+    cy.get('input[name="email"]').type(email);
+    cy.get('input[name="password"]').type(password);
+    cy.get('button[type="submit"]').click();
+
+    cy.url().should("eq", `${Cypress.config().baseUrl}/preferences`);
     cy.get('[cy-data="notification-title"').should(
       "contain.text",
       "You have successfully logged in!",

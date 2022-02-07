@@ -4,6 +4,7 @@ import {
   LoaderFunction,
   redirect,
   useActionData,
+  useLoaderData,
   useTransition,
 } from "remix";
 import { z } from "zod";
@@ -47,11 +48,17 @@ export const action: ActionFunction = async ({ request }) => {
     message: "You have successfully logged in!",
   });
 
-  return redirect("/", {
+  const redirectUrl = new URL(request.url).searchParams.get("redirect") ?? "/";
+
+  return redirect(redirectUrl, {
     headers: {
       "Set-Cookie": await commitSession(session),
     },
   });
+};
+
+type LoaderData = {
+  postUrl: string;
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -59,10 +66,15 @@ export const loader: LoaderFunction = async ({ request }) => {
 
   if (user) return redirect("/");
 
-  return {};
+  const url = new URL(request.url);
+
+  return {
+    postUrl: `${url.pathname}?${url.searchParams.toString()}`,
+  };
 };
 
 export default function Login() {
+  const { postUrl } = useLoaderData<LoaderData>();
   const actionData: ActionData | undefined = useActionData();
   const transition = useTransition();
 
@@ -70,7 +82,7 @@ export default function Login() {
     <div>
       <PageTitle>Login</PageTitle>
 
-      <Form method="post" className="w-full sm:w-80">
+      <Form method="post" action={postUrl} className="w-full sm:w-80">
         <FormText
           name="email"
           label="Email"

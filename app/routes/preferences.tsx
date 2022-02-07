@@ -14,7 +14,7 @@ import { zfd } from "zod-form-data";
 import FormText from "~/components/FormText";
 import PageTitle from "~/components/PageTitle";
 import updateUser from "~/libs/user/updateUser";
-import { getAuthUser } from "~/utils/auth.server";
+import { requireUserSession } from "~/utils/auth.server";
 import { commitSession, getSession } from "~/utils/session.server";
 import db from "~/utils/db.server";
 import FormSubmitButton from "~/components/FormSubmitButton";
@@ -78,9 +78,7 @@ type ActionData = {
 };
 
 export const action: ActionFunction = async ({ request }) => {
-  const user = await getAuthUser(request);
-
-  if (!user) return redirect("/login");
+  const user = await requireUserSession(request);
 
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
@@ -116,9 +114,7 @@ type LoaderData = {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const user = await getAuthUser(request);
-
-  if (!user) return redirect("/login");
+  const user = await requireUserSession(request);
 
   return { user };
 };
