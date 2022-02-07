@@ -5,7 +5,7 @@ import {
   InformationCircleIcon,
   XIcon,
 } from "@heroicons/react/outline";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export type NotificationData = {
   type: "success" | "error" | "warning" | "info";
@@ -33,6 +33,10 @@ function Notification({ notification }: Props) {
 
   const [isActive, setIsActive] = useState(true);
   const onNotificationClose = () => setIsActive(false);
+
+  useEffect(() => {
+    setIsActive(true);
+  }, [notification]);
 
   if (!isActive) return null;
 
