@@ -3,8 +3,8 @@ import {
   CheckIcon,
   ExclamationIcon,
   InformationCircleIcon,
-  XIcon,
 } from "@heroicons/react/outline";
+import { XIcon } from "@heroicons/react/solid";
 import { useEffect, useState } from "react";
 
 export type NotificationData = {
@@ -62,7 +62,7 @@ function Notification({ notification }: Props) {
           className="btn btn-sm btn-ghost btn-square"
           onClick={onNotificationClose}
         >
-          <XIcon />
+          <XIcon className="w-6" />
         </button>
       </div>
     </div>
