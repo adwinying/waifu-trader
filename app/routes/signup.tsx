@@ -7,13 +7,13 @@ import {
   useTransition,
 } from "remix";
 import { z } from "zod";
-import { RefreshIcon } from "@heroicons/react/outline";
 import db from "~/utils/db.server";
 import registerUser from "~/libs/user/registerUser";
 import { commitSession } from "~/utils/session.server";
 import { createUserSession, getAuthUser } from "~/utils/auth.server";
 import FormText from "~/components/FormText";
 import PageTitle from "~/components/PageTitle";
+import FormSubmitButton from "~/components/FormSubmitButton";
 
 export const validationSchema = z
   .object({
@@ -121,20 +121,7 @@ export default function SignUpRoute() {
           disabled={transition.state === "submitting"}
         />
 
-        <button
-          type="submit"
-          className="mt-5 btn btn-primary"
-          disabled={transition.state === "submitting"}
-        >
-          {transition.state === "submitting" ? (
-            <>
-              <RefreshIcon className="w-5 h-5 mr-2 animate-spin" />
-              Submitting...
-            </>
-          ) : (
-            "Submit"
-          )}
-        </button>
+        <FormSubmitButton isSubmitting={transition.state === "submitting"} />
       </Form>
     </div>
   );

@@ -1,4 +1,3 @@
-import { RefreshIcon } from "@heroicons/react/outline";
 import {
   ActionFunction,
   Form,
@@ -8,6 +7,7 @@ import {
   useTransition,
 } from "remix";
 import { z } from "zod";
+import FormSubmitButton from "~/components/FormSubmitButton";
 import FormText from "~/components/FormText";
 import PageTitle from "~/components/PageTitle";
 import authenticateUser from "~/libs/user/authenticateUser";
@@ -90,20 +90,7 @@ export default function Login() {
           disabled={transition.state === "submitting"}
         />
 
-        <button
-          type="submit"
-          className="mt-5 btn btn-primary"
-          disabled={transition.state === "submitting"}
-        >
-          {transition.state === "submitting" ? (
-            <>
-              <RefreshIcon className="w-5 h-5 mr-2 animate-spin" />
-              Submitting...
-            </>
-          ) : (
-            "Submit"
-          )}
-        </button>
+        <FormSubmitButton isSubmitting={transition.state === "submitting"} />
       </Form>
     </div>
   );

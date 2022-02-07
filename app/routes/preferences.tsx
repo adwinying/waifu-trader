@@ -1,4 +1,3 @@
-import { RefreshIcon } from "@heroicons/react/outline";
 import { User } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import {
@@ -18,6 +17,7 @@ import updateUser from "~/libs/user/updateUser";
 import { getAuthUser } from "~/utils/auth.server";
 import { commitSession, getSession } from "~/utils/session.server";
 import db from "~/utils/db.server";
+import FormSubmitButton from "~/components/FormSubmitButton";
 
 export const validationSchema = z
   .object({
@@ -181,20 +181,7 @@ export default function Preferences() {
           disabled={transition.state === "submitting"}
         />
 
-        <button
-          type="submit"
-          className="mt-5 btn btn-primary"
-          disabled={transition.state === "submitting"}
-        >
-          {transition.state === "submitting" ? (
-            <>
-              <RefreshIcon className="w-5 h-5 mr-2 animate-spin" />
-              Submitting...
-            </>
-          ) : (
-            "Submit"
-          )}
-        </button>
+        <FormSubmitButton isSubmitting={transition.state === "submitting"} />
       </Form>
     </div>
   );
