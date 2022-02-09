@@ -1,7 +1,7 @@
 import { UserCircleIcon } from "@heroicons/react/solid";
 import { Link } from "remix";
 import logo from "~/assets/img/logo.jpg";
-import gem from "~/assets/img/gem.svg";
+import gemIcon from "~/assets/img/gem.svg";
 
 type Props = {
   userName: string | undefined;
@@ -23,7 +23,7 @@ export default function Header({ userName, points }: Props) {
           {isLoggedIn ? (
             <>
               <Link to="/points" className="hover:opacity-80">
-                <img src={gem} alt="Gem Icon" className="inline h-6 mr-1" />
+                <img src={gemIcon} alt="Gem Icon" className="inline h-6 mr-1" />
                 <span cy-data="header-points">{points?.toLocaleString()}</span>
               </Link>
               <Link to="/preferences" className="hover:opacity-80">
