@@ -8,4 +8,7 @@ node_modules
 /prisma/test.db*
 /coverage/*
 /cypress/videos/*
+/data/waifus
+/data/upload.log
+/data/transformed.json
 .env

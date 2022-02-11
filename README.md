@@ -1,53 +1,49 @@
-# Welcome to Remix!
+# waifu-trader
 
-- [Remix Docs](https://remix.run/docs)
+## Tech Stack
 
-## Development
+- Prisma
+- Sqlite
+- Remix
+- React
+- TailwindCSS
 
-From your terminal:
+## Setup
 
-```sh
-npm run dev
+```bash
+$ npx prisma migrate dev
+$ npm run dev
 ```
 
-This starts your app in development mode, rebuilding assets on file changes.
+## Testing
 
-## Deployment
+### Unit Test (Jest)
 
-First, build your app for production:
-
-```sh
-npm run build
+```bash
+$ npm test
 ```
 
-Then run the app in production mode:
+### E2E (Cypress)
 
-```sh
-npm start
+```bash
+$ npm cypress:run
 ```
 
-Now you'll need to pick a host to deploy it to.
+## Waifu data
 
-### DIY
+0. Install deno
 
-If you're familiar with deploying node applications, the built-in Remix app server is production-ready.
+1. Get waifu data from [Kaggle](https://www.kaggle.com/corollari/waifus) and extract to `data/`
 
-Make sure to deploy the output of `remix build`
+2. Transform JSON data
 
-- `build/`
-- `public/build/`
+```bash
+$ cd data
+$ deno run --allow-read --allow-write transform.ts
+```
 
-### Using a Template
+3. Upload images to imgur
 
-When you ran `npx create-remix@latest` there were a few choices for hosting. You can run that again to create a new project, then copy over your `app/` folder to the new project that's pre-configured for your target server.
-
-```sh
-cd ..
-# create a new project, and pick a pre-configured host
-npx create-remix@latest
-cd my-new-remix-app
-# remove the new project's app (not the old one!)
-rm -rf app
-# copy your app over
-cp -R ../my-old-remix-app/app app
+```bash
+$ deno run --allow-read --allow-write --allow-net upload.ts
 ```

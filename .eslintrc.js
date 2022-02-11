@@ -52,6 +52,8 @@ module.exports = {
         depth: 3,
       },
     ],
+    // allow continue in loops
+    "no-continue": "off",
   },
   settings: {
     "import/resolver": {
