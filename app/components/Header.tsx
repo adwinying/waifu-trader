@@ -1,4 +1,11 @@
-import { CogIcon, LogoutIcon, UserCircleIcon } from "@heroicons/react/solid";
+import {
+  CogIcon,
+  LoginIcon,
+  LogoutIcon,
+  MenuIcon,
+  PencilIcon,
+  UserCircleIcon,
+} from "@heroicons/react/solid";
 import { Link } from "remix";
 import logo from "~/assets/img/logo.jpg";
 import gemIcon from "~/assets/img/gem.svg";
@@ -19,7 +26,78 @@ export default function Header({ userName, points }: Props) {
           <span>Waifu Trader</span>
         </Link>
 
-        <div className="flex space-x-4 items-center">
+        <div className="md:hidden dropdown dropdown-end">
+          <div
+            // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+            tabIndex={-1}
+          >
+            <MenuIcon className="w-8 h-8" />
+          </div>
+          <ul
+            // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+            tabIndex={0}
+            className="mt-2 p-2 shadow-lg menu dropdown-content
+              bg-base-100 rounded-box w-52"
+          >
+            {isLoggedIn ? (
+              <>
+                <li className="menu-title">
+                  <span>Point Balance</span>
+                </li>
+                <li>
+                  <Link to="/points" className="hover:opacity-80">
+                    <img
+                      src={gemIcon}
+                      alt="Gem Icon"
+                      className="inline w-4 h-4 mr-2"
+                    />
+                    <span cy-data="header-points">
+                      {points?.toLocaleString()}
+                    </span>
+                  </Link>
+                </li>
+                <li className="menu-title">
+                  <span>Menu</span>
+                </li>
+                <li>
+                  <Link to="/preferences">
+                    <CogIcon className="inline w-5 h-5 mr-1" />
+                    <span>Preferences</span>
+                  </Link>
+                </li>
+                <form action="/logout" method="POST">
+                  <li>
+                    <button
+                      type="submit"
+                      className="px-5 btn btn-outline btn-error justify-start border-0
+                          font-normal normal-case text-base"
+                    >
+                      <LogoutIcon className="inline w-5 h-5 mr-1" />
+                      <span>Logout</span>
+                    </button>
+                  </li>
+                </form>
+              </>
+            ) : (
+              <>
+                <li>
+                  <Link to="/signup">
+                    <PencilIcon className="inline w-5 h-5 mr-1 text-primary" />
+                    <span className="text-primary">Sign Up</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/login">
+                    <LoginIcon className="inline w-5 h-5 mr-1" />
+                    Login
+                  </Link>
+                </li>
+              </>
+            )}
+          </ul>
+        </div>
+
+        <div className="hidden md:flex space-x-4 items-center">
           {isLoggedIn ? (
             <>
               <Link to="/points" className="hover:opacity-80">
