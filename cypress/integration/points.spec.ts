@@ -1,4 +1,4 @@
-describe("preferences", () => {
+describe("points", () => {
   beforeEach(() => {
     cy.setupDb();
   });

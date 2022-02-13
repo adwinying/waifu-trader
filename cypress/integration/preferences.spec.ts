@@ -32,7 +32,7 @@ describe("preferences", () => {
 
     cy.login({ name, email });
     cy.visit("/preferences");
-    cy.get('button[type="submit"]').click();
+    cy.get('button[cy-data="formSubmitButton"]').click();
 
     cy.url().should("eq", `${Cypress.config().baseUrl}/preferences`);
     cy.get('[cy-data="notification-title"').should(
@@ -57,7 +57,7 @@ describe("preferences", () => {
     cy.login(user2);
     cy.visit("/preferences");
     cy.get('input[name="email"]').clear().type(user1.email);
-    cy.get('button[type="submit"]').click();
+    cy.get('button[cy-data="formSubmitButton"]').click();
 
     cy.url().should("eq", `${Cypress.config().baseUrl}/preferences`);
     cy.get('label[for="email-error"').should(
@@ -75,7 +75,7 @@ describe("preferences", () => {
     cy.visit("/preferences");
     cy.get('input[name="newPassword"]').type(newPassword);
     cy.get('input[name="passwordConfirmation"]').type(newPassword);
-    cy.get('button[type="submit"]').click();
+    cy.get('button[cy-data="formSubmitButton"]').click();
 
     cy.url().should("eq", `${Cypress.config().baseUrl}/preferences`);
     cy.get('label[for="currentPassword-error"').should(
@@ -92,7 +92,7 @@ describe("preferences", () => {
     cy.login({ name, email });
     cy.visit("/preferences");
     cy.get('input[name="currentPassword"]').type(wrongPassword);
-    cy.get('button[type="submit"]').click();
+    cy.get('button[cy-data="formSubmitButton"]').click();
 
     cy.url().should("eq", `${Cypress.config().baseUrl}/preferences`);
     cy.get('label[for="currentPassword-error"').should(
@@ -116,7 +116,7 @@ describe("preferences", () => {
     cy.get('input[name="currentPassword"]').type(oldPassword);
     cy.get('input[name="newPassword"]').type(newPassword);
     cy.get('input[name="passwordConfirmation"]').type(newPassword);
-    cy.get('button[type="submit"]').click();
+    cy.get('button[cy-data="formSubmitButton"]').click();
 
     cy.url().should("eq", `${Cypress.config().baseUrl}/preferences`);
     cy.get('[cy-data="notification-title"').should(

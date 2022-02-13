@@ -9,6 +9,7 @@ export default function FormSubmitButton({ isSubmitting }: Props) {
     <button
       type="submit"
       className="mt-5 btn btn-primary"
+      cy-data="formSubmitButton"
       disabled={isSubmitting}
     >
       {isSubmitting ? (
