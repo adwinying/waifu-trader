@@ -1,16 +1,24 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma } from "@prisma/client";
+import registerUser from "~/libs/user/registerUser";
+import db from "~/utils/db.server";
 
-const db = new PrismaClient();
-
-const users = [
+const users: Prisma.UserCreateInput[] = [
   {
     name: "Admin",
     email: "admin@example.org",
-    password: "$2y$10$fQ/fazS6NSwUfY7/lauARuiuE/7cZEjrdpuvF4PK6J18Hx14UbLMK", // secret
-    points: 10000000,
+    password: "secret",
+  },
+  {
+    name: "test",
+    email: "test@example.org",
+    password: "secret",
   },
 ];
 
 (async () => {
-  await Promise.all(users.map((user) => db.user.create({ data: user })));
+  await Promise.all(users.map((user) => registerUser(user)));
+  await db.user.update({
+    data: { points: 1000000 },
+    where: { email: users[0].email },
+  });
 })();
