@@ -17,9 +17,8 @@
     "test": "jest",
     "test:coverage": "jest --coverage",
     "test:server": "env-cmd -f .env.test npm run dev:base",
-    "test:seed": "rm -f ./prisma/test.db ./prisma/test.db.bak && env-cmd -f .env.test prisma migrate dev && cp ./prisma/test.db ./prisma/test.db.bak",
-    "cypress:open": "npm run test:seed && start-server-and-test test:server 3002 'cypress open'",
-    "cypress:run": "npm run test:seed && start-server-and-test 'env-cmd -f .env.test npm start' 3002 'cypress run'",
+    "cypress:open": "start-server-and-test test:server 3002 'cypress open'",
+    "cypress:run": "start-server-and-test 'env-cmd -f .env.test npm start' 3002 'cypress run'",
     "prepare": "husky install"
   },
   "dependencies": {

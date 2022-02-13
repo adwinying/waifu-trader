@@ -3,7 +3,7 @@
 ## Tech Stack
 
 - Prisma
-- Sqlite
+- PostgreSQL
 - Remix
 - React
 - TailwindCSS

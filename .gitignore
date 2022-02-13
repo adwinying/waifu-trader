@@ -4,8 +4,6 @@ node_modules
 /build
 /public/build
 /app/tailwind.css
-/prisma/dev.db*
-/prisma/test.db*
 /coverage/*
 /cypress/videos/*
 /data/waifus

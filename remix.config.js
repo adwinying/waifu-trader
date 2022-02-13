@@ -10,7 +10,7 @@ module.exports = {
   assetsBuildDirectory: "public/build",
   publicPath: "/build/",
   serverBuildDirectory: "build",
-  devServerPort: 8002,
+  devServerPort: process.env.DEV_PORT || 8002,
   ignoredRouteFiles: [".*"],
   routes(defineRoutes) {
     return defineRoutes((route) => {
