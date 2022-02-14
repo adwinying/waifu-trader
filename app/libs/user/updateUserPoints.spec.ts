@@ -44,6 +44,17 @@ describe("updateUserPoints", () => {
 
     const result = await updateUserPoints({ user, pointChange, reason });
 
+    expect(prismaMock.user.update).toHaveBeenCalledWith({
+      data: { points: pointChange },
+      where: { id: user.id },
+    });
+    expect(prismaMock.pointHistory.create).toHaveBeenCalledWith({
+      data: {
+        userId: user.id,
+        points: pointChange,
+        reason,
+      },
+    });
     expect(prismaMock.$transaction).toHaveBeenCalledWith([
       new Promise((resolve) => {
         resolve(updatedUser);
