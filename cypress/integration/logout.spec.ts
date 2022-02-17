@@ -5,14 +5,14 @@ describe("logout", () => {
   });
 
   it("should logout user if authenticated", () => {
-    const name = "foobar";
-    const email = "test@example.org";
+    const username = "foobar";
+    const email = "foo@example.org";
 
     cy.setupDb();
-    cy.login({ name, email });
+    cy.login({ username, email });
 
     cy.visit("/");
-    cy.get('[cy-data="header-user-name"]').should("contain.text", name);
+    cy.get('[cy-data="header-user-name"]').should("contain.text", username);
 
     cy.visit({ url: "/logout", method: "POST" });
     cy.url().should("eq", `${Cypress.config().baseUrl}/login`);

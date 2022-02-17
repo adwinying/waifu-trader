@@ -1,6 +1,6 @@
 export type TestAuthData = {
   email: string;
-  name?: string;
+  username?: string;
   password?: string;
 };
 

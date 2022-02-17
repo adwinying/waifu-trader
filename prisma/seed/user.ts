@@ -4,12 +4,12 @@ import db from "~/utils/db.server";
 
 const users: Prisma.UserCreateInput[] = [
   {
-    name: "Admin",
+    username: "admin",
     email: "admin@example.org",
     password: "secret",
   },
   {
-    name: "test",
+    username: "test",
     email: "test@example.org",
     password: "secret",
   },

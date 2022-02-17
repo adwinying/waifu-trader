@@ -29,14 +29,14 @@ describe("login", () => {
   });
 
   it("should be able to login and redirect to top", () => {
-    const name = "Test User";
-    const email = "test@example.org";
+    const username = "foobar";
+    const email = "foo@example.org";
     const password = "secret";
     const hashedPassword =
       "$2y$10$fQ/fazS6NSwUfY7/lauARuiuE/7cZEjrdpuvF4PK6J18Hx14UbLMK";
 
     cy.setupDb();
-    cy.seedDb({ user: [{ name, email, password: hashedPassword }] });
+    cy.seedDb({ user: [{ username, email, password: hashedPassword }] });
 
     cy.visit("/login");
     cy.get('input[name="email"]').type(email);
@@ -48,12 +48,12 @@ describe("login", () => {
       "contain.text",
       "You have successfully logged in!",
     );
-    cy.get('[cy-data="header-user-name"]').should("contain.text", name);
+    cy.get('[cy-data="header-user-name"]').should("contain.text", username);
   });
 
   it("should redirect to destination after login if redirect query is specified", () => {
-    const name = "Test User";
-    const email = "test@example.org";
+    const username = "foobar";
+    const email = "foo@example.org";
     const password = "secret";
     const hashedPassword =
       "$2y$10$fQ/fazS6NSwUfY7/lauARuiuE/7cZEjrdpuvF4PK6J18Hx14UbLMK";
@@ -63,7 +63,7 @@ describe("login", () => {
     );
 
     cy.setupDb();
-    cy.seedDb({ user: [{ name, email, password: hashedPassword }] });
+    cy.seedDb({ user: [{ username, email, password: hashedPassword }] });
 
     cy.visit(`/login?redirect=${redirectUrl}`);
     cy.get('input[name="email"]').type(email);
@@ -75,7 +75,7 @@ describe("login", () => {
       "contain.text",
       "You have successfully logged in!",
     );
-    cy.get('[cy-data="header-user-name"]').should("contain.text", name);
+    cy.get('[cy-data="header-user-name"]').should("contain.text", username);
   });
 
   it("should redirect to home page if authenticated", () => {

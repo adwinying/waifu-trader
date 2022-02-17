@@ -7,13 +7,13 @@ export const SALT_ROUNDS = 10;
 export type RegisterUser = {
   email: string;
   password: string;
-  name: string;
+  username: string;
 };
 
 export default async function registerUser({
   email,
   password,
-  name,
+  username,
 }: RegisterUser) {
   const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
   const initialPoints = 500;
@@ -21,7 +21,7 @@ export default async function registerUser({
   const userData = {
     email,
     password: hashedPassword,
-    name,
+    username,
   };
 
   const newUser = await db.user.create({ data: userData });

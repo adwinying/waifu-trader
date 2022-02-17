@@ -17,7 +17,20 @@ import FormSubmitButton from "~/components/FormSubmitButton";
 
 export const validationSchema = z
   .object({
-    name: z.string().nonempty(),
+    username: z
+      .string()
+      .min(1)
+      .max(50)
+      .regex(/^[A-Za-z0-9_-]+$/, {
+        message: "Only alphanumeric characters, _, - are allowed",
+      })
+      .refine(async (username) => {
+        const existingUserWithUsername = await db.user.findUnique({
+          where: { username },
+        });
+
+        return existingUserWithUsername === null;
+      }, "Username already in use"),
     email: z
       .string()
       .email()
@@ -84,11 +97,11 @@ export default function SignUpRoute() {
 
       <Form method="post" className="w-full sm:w-80">
         <FormText
-          name="name"
-          label="Name"
-          defaultValue={actionData?.data.name}
-          errors={actionData?.errors.name}
-          placeholder="Keima Katsuragi"
+          name="username"
+          label="Username"
+          defaultValue={actionData?.data.username}
+          errors={actionData?.errors.username}
+          placeholder="keima_katsuragi"
           disabled={transition.state === "submitting"}
         />
 

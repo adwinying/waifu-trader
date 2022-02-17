@@ -5,7 +5,7 @@ import updateUserPoints from "./updateUserPoints";
 describe("updateUserPoints", () => {
   const user: User = {
     id: "asdf-qwer-1234-5678",
-    name: "John Doe",
+    username: "john",
     email: "john@doe.com",
     password: "hashed_123456",
     points: 0,

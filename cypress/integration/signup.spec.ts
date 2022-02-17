@@ -7,7 +7,7 @@ describe("signup", () => {
   it("should show required fields", () => {
     cy.visit("/signup");
     cy.get('button[type="submit"]').click();
-    cy.get('label[for="name-error"]').should(
+    cy.get('label[for="username-error"]').should(
       "contain.text",
       "Should be at least 1 characters",
     );
@@ -22,13 +22,54 @@ describe("signup", () => {
     );
   });
 
-  it("should show error when email already exists", () => {
-    const name = "Test User";
-    const email = "test@example.org";
+  it("should show error when username exceeds 50 chars", () => {
+    const username = "f".repeat(51);
+
+    cy.visit("/signup");
+    cy.get('input[name="username"]').type(username);
+    cy.get('button[type="submit"]').click();
+    cy.get('label[for="username-error"]').should(
+      "contain.text",
+      "Should be at most 50 characters long",
+    );
+  });
+
+  it("should show error when username already exists", () => {
+    const username = "foo";
+    const email = "foo@example.org";
     const password = "hashed_password";
 
     cy.setupDb();
-    cy.seedDb({ user: [{ name, email, password }] });
+    cy.seedDb({ user: [{ username, email, password }] });
+
+    cy.visit("/signup");
+    cy.get('input[name="username"]').type(username);
+    cy.get('button[type="submit"]').click();
+    cy.get('label[for="username-error"]').should(
+      "contain.text",
+      "Username already in use",
+    );
+  });
+
+  it("should show error when username contains invalid characters", () => {
+    const username = "foo@bar";
+
+    cy.visit("/signup");
+    cy.get('input[name="username"]').type(username);
+    cy.get('button[type="submit"]').click();
+    cy.get('label[for="username-error"]').should(
+      "contain.text",
+      "Only alphanumeric characters, _, - are allowed",
+    );
+  });
+
+  it("should show error when email already exists", () => {
+    const username = "foo";
+    const email = "foo@example.org";
+    const password = "hashed_password";
+
+    cy.setupDb();
+    cy.seedDb({ user: [{ username, email, password }] });
 
     cy.visit("/signup");
     cy.get('input[name="email"]').type(email);
@@ -53,14 +94,14 @@ describe("signup", () => {
   });
 
   it("should be able to sign up and redirect to top", () => {
-    const name = "Test User";
-    const email = "test@example.org";
+    const username = "foo";
+    const email = "foo@example.org";
     const password = "password";
     const initialPoints = 500;
 
     cy.setupDb();
     cy.visit("/signup");
-    cy.get('input[name="name"]').type(name);
+    cy.get('input[name="username"]').type(username);
     cy.get('input[name="email"]').type(email);
     cy.get('input[name="password"]').type(password);
     cy.get('input[name="passwordConfirmation"]').type(password);
@@ -71,7 +112,7 @@ describe("signup", () => {
       "contain.text",
       "You have successfully signed up!",
     );
-    cy.get('[cy-data="header-user-name"]').should("contain.text", name);
+    cy.get('[cy-data="header-user-name"]').should("contain.text", username);
     cy.get('[cy-data="header-points"]').should("contain.text", initialPoints);
   });
 

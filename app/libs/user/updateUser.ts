@@ -7,14 +7,14 @@ export type UpdateUser = {
   user: User;
   email?: string;
   password?: string;
-  name?: string;
+  username?: string;
 };
 
 export default async function updateUser({
   user,
   email,
   password,
-  name,
+  username,
 }: UpdateUser) {
   const newPassword = password
     ? await bcrypt.hash(password, SALT_ROUNDS)
@@ -25,7 +25,7 @@ export default async function updateUser({
     data: {
       email,
       password: newPassword,
-      name,
+      username,
     },
   });
 }

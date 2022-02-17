@@ -22,15 +22,36 @@ import FormSubmitButton from "~/components/FormSubmitButton";
 export const validationSchema = z
   .object({
     user: z.object({
+      username: z.string(),
       email: z.string(),
       password: z.string(),
     }),
-    name: z.string().nonempty(),
+    username: z
+      .string()
+      .min(1)
+      .max(50)
+      .regex(/[A-Za-z0-9_-]+/, {
+        message: "Only alphanumeric characters, _, - are allowed",
+      }),
     email: z.string().email(),
     currentPassword: zfd.text(z.string().nullish()),
     newPassword: zfd.text(z.string().min(8).nullish()),
     passwordConfirmation: zfd.text(z.string().min(8).nullish()),
   })
+  .refine(
+    async ({ username, user }) => {
+      if (user.username === username) return true;
+
+      const existingUserWithUsername = await db.user.findFirst({
+        where: {
+          AND: [{ username }, { NOT: { username: user.username } }],
+        },
+      });
+
+      return existingUserWithUsername === null;
+    },
+    { message: "Username already in use", path: ["username"] },
+  )
   .refine(
     async ({ email, user }) => {
       if (user.email === email) return true;
@@ -90,7 +111,7 @@ export const action: ActionFunction = async ({ request }) => {
 
   await updateUser({
     user,
-    name: validation.data.name ?? undefined,
+    username: validation.data.username ?? undefined,
     email: validation.data.email ?? undefined,
     password: validation.data.newPassword ?? undefined,
   });
@@ -130,11 +151,11 @@ export default function Preferences() {
 
       <Form method="post" className="w-full sm:w-80">
         <FormText
-          name="name"
-          label="Name"
-          defaultValue={actionData?.data.name ?? user.name}
-          errors={actionData?.errors.name}
-          placeholder="Keima Katsuragi"
+          name="username"
+          label="Username"
+          defaultValue={actionData?.data.username ?? user.username}
+          errors={actionData?.errors.username}
+          placeholder="keima_katsuragi"
           disabled={transition.state === "submitting"}
         />
 

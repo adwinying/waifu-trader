@@ -16,13 +16,13 @@ describe("points", () => {
   });
 
   it("should show user's point balance", () => {
-    const name = "foo";
+    const username = "foo";
     const email = "foo@bar.com";
     const password = "password";
     const points = 1000;
 
     cy.seedDb({
-      user: [{ name, email, password, points }],
+      user: [{ username, email, password, points }],
     });
 
     cy.login({ email });
@@ -41,7 +41,7 @@ describe("points", () => {
     ];
 
     const user = {
-      name: "foo",
+      username: "foo",
       email: "foo@bar.com",
       password: "password",
       points: 1000,

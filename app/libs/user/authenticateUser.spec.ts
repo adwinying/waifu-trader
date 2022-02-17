@@ -17,7 +17,7 @@ describe("authenticateUser", () => {
   test("should return null if password does not match", async () => {
     const expected = {
       id: "asdf-qwer-1234-5678",
-      name: "John Doe",
+      username: "john",
       email: input.email,
       password: "some_hashed_password",
       points: 0,
@@ -33,7 +33,7 @@ describe("authenticateUser", () => {
   test("should return true if password match", async () => {
     const expected = {
       id: "asdf-qwer-1234-5678",
-      name: "John Doe",
+      username: "john",
       email: input.email,
       password: await bcrypt.hash(input.password, 10),
       points: 0,

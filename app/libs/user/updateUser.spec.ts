@@ -15,21 +15,21 @@ describe("updateUser", () => {
     input = {
       user: {
         id: "asdf-qwer-1234-5678",
-        name: "John Doe",
+        username: "john",
         email: "john@doe.com",
         password: "hashed_123456",
         points: 500,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
-      name: "Jane Doe",
+      username: "jane",
       email: "jane@doe.com",
       password: "234567",
     };
 
     expected = {
       id: input.user.id,
-      name: input.name as string,
+      username: input.username as string,
       email: input.email as string,
       password: "hashed_234567",
       points: input.user.points,
@@ -56,7 +56,7 @@ describe("updateUser", () => {
     expect(prismaMock.user.update).toHaveBeenCalledWith({
       where: { id: expected.id },
       data: {
-        name: expected.name,
+        username: expected.username,
         email: expected.email,
         password: expected.password,
       },

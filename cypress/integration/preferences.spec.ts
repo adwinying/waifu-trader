@@ -15,22 +15,22 @@ describe("preferences", () => {
     );
   });
 
-  it("should populate name and email text fields", () => {
-    const name = "foo";
+  it("should populate username and email text fields", () => {
+    const username = "foo";
     const email = "foo@bar.com";
 
-    cy.login({ name, email });
+    cy.login({ username, email });
     cy.visit("/preferences");
     cy.get("h1").should("contain.text", "Preferences");
-    cy.get('input[name="name"]').should("have.attr", "value", name);
+    cy.get('input[name="username"]').should("have.attr", "value", username);
     cy.get('input[name="email"]').should("have.attr", "value", email);
   });
 
   it("should be able to submit form successfully without input", () => {
-    const name = "foo";
+    const username = "foo";
     const email = "foo@bar.com";
 
-    cy.login({ name, email });
+    cy.login({ username, email });
     cy.visit("/preferences");
     cy.get('button[cy-data="formSubmitButton"]').click();
 
@@ -41,14 +41,39 @@ describe("preferences", () => {
     );
   });
 
-  it("should reject another existing user's email", () => {
+  it("should reject another existing user's username", () => {
     const user1 = {
-      name: "foo",
+      username: "foo",
       email: "foo@example.org",
       password: "smth",
     };
     const user2 = {
-      name: "bar",
+      username: "bar",
+      email: "bar@example.org",
+      password: "password",
+    };
+
+    cy.seedDb({ user: [user1] });
+    cy.login(user2);
+    cy.visit("/preferences");
+    cy.get('input[name="username"]').clear().type(user1.username);
+    cy.get('button[cy-data="formSubmitButton"]').click();
+
+    cy.url().should("eq", `${Cypress.config().baseUrl}/preferences`);
+    cy.get('label[for="username-error"').should(
+      "contain.text",
+      "Username already in use",
+    );
+  });
+
+  it("should reject another existing user's email", () => {
+    const user1 = {
+      username: "foo",
+      email: "foo@example.org",
+      password: "smth",
+    };
+    const user2 = {
+      username: "bar",
       email: "bar@example.org",
       password: "password",
     };
@@ -67,11 +92,11 @@ describe("preferences", () => {
   });
 
   it("should prompt for current password if new password is input", () => {
-    const name = "foo";
+    const username = "foo";
     const email = "foo@bar.com";
     const newPassword = "foobarbaz";
 
-    cy.login({ name, email });
+    cy.login({ username, email });
     cy.visit("/preferences");
     cy.get('input[name="newPassword"]').type(newPassword);
     cy.get('input[name="passwordConfirmation"]').type(newPassword);
@@ -85,11 +110,11 @@ describe("preferences", () => {
   });
 
   it("should reject if current password incorrect", () => {
-    const name = "foo";
+    const username = "foo";
     const email = "foo@bar.com";
     const wrongPassword = "foobar";
 
-    cy.login({ name, email });
+    cy.login({ username, email });
     cy.visit("/preferences");
     cy.get('input[name="currentPassword"]').type(wrongPassword);
     cy.get('button[cy-data="formSubmitButton"]').click();
@@ -102,16 +127,16 @@ describe("preferences", () => {
   });
 
   it("should be able to update user info", () => {
-    const oldName = "foo";
+    const oldUsername = "foo";
     const oldEmail = "foo@bar.com";
     const oldPassword = "foofoofoo";
-    const newName = "bar";
+    const newUsername = "bar";
     const newEmail = "bar@baz.com";
     const newPassword = "foobarbaz";
 
-    cy.login({ name: oldName, email: oldEmail, password: oldPassword });
+    cy.login({ username: oldUsername, email: oldEmail, password: oldPassword });
     cy.visit("/preferences");
-    cy.get('input[name="name"]').clear().type(newName);
+    cy.get('input[name="username"]').clear().type(newUsername);
     cy.get('input[name="email"]').clear().type(newEmail);
     cy.get('input[name="currentPassword"]').type(oldPassword);
     cy.get('input[name="newPassword"]').type(newPassword);
@@ -124,7 +149,7 @@ describe("preferences", () => {
       "Preferences updated.",
     );
 
-    cy.get('input[name="name"]').should("have.attr", "value", newName);
+    cy.get('input[name="username"]').should("have.attr", "value", newUsername);
     cy.get('input[name="email"]').should("have.attr", "value", newEmail);
   });
 });

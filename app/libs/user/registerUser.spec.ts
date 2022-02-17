@@ -20,14 +20,14 @@ describe("registerUser", () => {
 
   beforeEach(() => {
     input = {
-      name: "John Doe",
+      username: "john",
       email: "john@doe.com",
       password: "123456",
     };
 
     expected = {
       id: "asdf-qwer-1234-5678",
-      name: input.name,
+      username: input.username,
       email: input.email,
       password: "hashed_123456",
       points: 500,
@@ -72,7 +72,7 @@ describe("registerUser", () => {
 
     expect(prismaMock.user.create).toHaveBeenCalledWith({
       data: {
-        name: input.name,
+        username: input.username,
         email: input.email,
         password: new Matcher(
           (actual: string) => /^\$2a\$10\$.+$/.test(actual),

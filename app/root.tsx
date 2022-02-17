@@ -51,7 +51,7 @@ export const loader: LoaderFunction = async ({ request }) => {
           ? undefined
           : {
               id: user.id,
-              name: user.name,
+              username: user.username,
               email: user.email,
               points: user.points,
             },
@@ -79,7 +79,7 @@ function Layout({ children }: LayoutProps) {
         <Links />
       </head>
       <body>
-        <Header userName={user?.name} points={user?.points} />
+        <Header userName={user?.username} points={user?.points} />
         <div className="container mx-auto px-4">
           {notification && <Notification notification={notification} />}
           {children}
