@@ -28,14 +28,14 @@ function FormText({
         name={name}
         defaultValue={defaultValue}
         disabled={disabled}
-        className={`input input-bordered ${
+        className={`input-bordered input ${
           errors?.length ? "input-error" : ""
         }`}
         placeholder={placeholder}
       />
       {errors && (
         <label
-          className="label label-text-alt text-error"
+          className="label-text-alt label text-error"
           htmlFor={`${name}-error`}
         >
           {errors[0]}

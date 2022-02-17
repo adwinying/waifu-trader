@@ -42,7 +42,7 @@ export default function Points() {
           className="flex items-center justify-center
           text-center text-5xl font-bold"
         >
-          <img src={gemIcon} alt="Gem Icon" className="inline w-9 mr-2" />
+          <img src={gemIcon} alt="Gem Icon" className="mr-2 inline w-9" />
           <span cy-data="pointBalance">{points.toLocaleString()}</span>
         </div>
       </div>
@@ -63,8 +63,8 @@ export default function Points() {
             }
 
             return (
-              <div className="card card-bordered shadow" cy-data="pointHistory">
-                <div className="flex flex-col-reverse justify-between md:flex-row md:items-center p-5">
+              <div className="card-bordered card shadow" cy-data="pointHistory">
+                <div className="flex flex-col-reverse justify-between p-5 md:flex-row md:items-center">
                   <div>
                     <div className="text-lg" cy-data="reason">
                       {history.reason}
@@ -77,7 +77,7 @@ export default function Points() {
                     </div>
                   </div>
                   <div
-                    className={`flex align-center stat-value mb-2 md:mb-0 ${textClass}`}
+                    className={`align-center stat-value mb-2 flex md:mb-0 ${textClass}`}
                     cy-data="pointChange"
                   >
                     {symbol}

@@ -20,24 +20,24 @@ export default function Header({ userName, points }: Props) {
 
   return (
     <header className="container mx-auto px-4 py-6">
-      <nav className="flex justify-between items-center">
+      <nav className="flex items-center justify-between">
         <Link to="/" className="flex space-x-2 text-3xl font-bold">
-          <img src={logo} alt="logo" className="rounded-full w-9 shadow" />
+          <img src={logo} alt="logo" className="w-9 rounded-full shadow" />
           <span>Waifu Trader</span>
         </Link>
 
-        <div className="md:hidden dropdown dropdown-end">
+        <div className="dropdown-end dropdown md:hidden">
           <div
             // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
             tabIndex={-1}
           >
-            <MenuIcon className="w-8 h-8" />
+            <MenuIcon className="h-8 w-8" />
           </div>
           <ul
             // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
             tabIndex={0}
-            className="mt-2 p-2 shadow-lg menu dropdown-content
-              bg-base-100 rounded-box w-52"
+            className="dropdown-content menu rounded-box mt-2 w-52
+              bg-base-100 p-2 shadow-lg"
           >
             {isLoggedIn ? (
               <>
@@ -49,7 +49,7 @@ export default function Header({ userName, points }: Props) {
                     <img
                       src={gemIcon}
                       alt="Gem Icon"
-                      className="inline w-4 h-4 mr-2"
+                      className="mr-2 inline h-4 w-4"
                     />
                     <span cy-data="header-points">
                       {points?.toLocaleString()}
@@ -61,7 +61,7 @@ export default function Header({ userName, points }: Props) {
                 </li>
                 <li>
                   <Link to="/preferences">
-                    <CogIcon className="inline w-5 h-5 mr-1" />
+                    <CogIcon className="mr-1 inline h-5 w-5" />
                     <span>Preferences</span>
                   </Link>
                 </li>
@@ -69,10 +69,10 @@ export default function Header({ userName, points }: Props) {
                   <li>
                     <button
                       type="submit"
-                      className="px-5 btn btn-outline btn-error justify-start border-0
-                          font-normal normal-case text-base"
+                      className="btn-outline btn btn-error justify-start border-0 px-5
+                          text-base font-normal normal-case"
                     >
-                      <LogoutIcon className="inline w-5 h-5 mr-1" />
+                      <LogoutIcon className="mr-1 inline h-5 w-5" />
                       <span>Logout</span>
                     </button>
                   </li>
@@ -82,13 +82,13 @@ export default function Header({ userName, points }: Props) {
               <>
                 <li>
                   <Link to="/signup">
-                    <PencilIcon className="inline w-5 h-5 mr-1 text-primary" />
+                    <PencilIcon className="mr-1 inline h-5 w-5 text-primary" />
                     <span className="text-primary">Sign Up</span>
                   </Link>
                 </li>
                 <li>
                   <Link to="/login">
-                    <LoginIcon className="inline w-5 h-5 mr-1" />
+                    <LoginIcon className="mr-1 inline h-5 w-5" />
                     Login
                   </Link>
                 </li>
@@ -97,29 +97,29 @@ export default function Header({ userName, points }: Props) {
           </ul>
         </div>
 
-        <div className="hidden md:flex space-x-4 items-center">
+        <div className="hidden items-center space-x-4 md:flex">
           {isLoggedIn ? (
             <>
               <Link to="/points" className="hover:opacity-80">
-                <img src={gemIcon} alt="Gem Icon" className="inline h-6 mr-1" />
+                <img src={gemIcon} alt="Gem Icon" className="mr-1 inline h-6" />
                 <span cy-data="header-points">{points?.toLocaleString()}</span>
               </Link>
-              <div className="dropdown dropdown-end">
+              <div className="dropdown-end dropdown">
                 <div
                   // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
                   tabIndex={0}
                 >
-                  <UserCircleIcon className="inline w-8 mr-1" />
+                  <UserCircleIcon className="mr-1 inline w-8" />
                   <span cy-data="header-user-name">{userName}</span>
                 </div>
                 <ul
                   // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
                   tabIndex={0}
-                  className="mt-2 p-2 shadow-lg menu dropdown-content bg-base-100 rounded-box w-52"
+                  className="dropdown-content menu rounded-box mt-2 w-52 bg-base-100 p-2 shadow-lg"
                 >
                   <li>
                     <Link to="/preferences">
-                      <CogIcon className="inline w-5 h-5 mr-1" />
+                      <CogIcon className="mr-1 inline h-5 w-5" />
                       <span>Preferences</span>
                     </Link>
                   </li>
@@ -127,10 +127,10 @@ export default function Header({ userName, points }: Props) {
                     <li>
                       <button
                         type="submit"
-                        className="px-5 btn btn-outline btn-error justify-start border-0
-                          font-normal normal-case text-base"
+                        className="btn-outline btn btn-error justify-start border-0 px-5
+                          text-base font-normal normal-case"
                       >
-                        <LogoutIcon className="inline w-5 h-5 mr-1" />
+                        <LogoutIcon className="mr-1 inline h-5 w-5" />
                         <span>Logout</span>
                       </button>
                     </li>

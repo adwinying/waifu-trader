@@ -43,7 +43,7 @@ function Notification({ notification }: Props) {
   return (
     <div className={`alert ${alertClass} mb-4`}>
       <div className="flex-1">
-        <Icon className="flex-shrink-0 w-6 h-6 mx-2" />
+        <Icon className="mx-2 h-6 w-6 flex-shrink-0" />
         <label>
           <h4 cy-data="notification-title">{notification.message}</h4>
           {notification.detail && (
@@ -59,7 +59,7 @@ function Notification({ notification }: Props) {
       <div className="flex-none">
         <button
           type="button"
-          className="btn btn-sm btn-ghost btn-square"
+          className="btn btn-ghost btn-square btn-sm"
           onClick={onNotificationClose}
         >
           <XIcon className="w-6" />
