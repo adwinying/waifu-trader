@@ -81,7 +81,7 @@ export default function Points() {
                     cy-data="pointChange"
                   >
                     {symbol}
-                    {Math.abs(history.points)}
+                    {Math.abs(history.points).toLocaleString()}
                   </div>
                 </div>
               </div>
