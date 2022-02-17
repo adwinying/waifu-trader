@@ -1,6 +1,6 @@
 import { LoaderFunction, useLoaderData } from "remix";
 import PageTitle from "~/components/PageTitle";
-import gemIcon from "~/assets/img/gem.svg";
+import GemIcon from "~/components/icons/GemIcon";
 import { requireUserSession } from "~/utils/auth.server";
 import db from "~/utils/db.server";
 
@@ -42,7 +42,7 @@ export default function Points() {
           className="flex items-center justify-center
           text-center text-5xl font-bold"
         >
-          <img src={gemIcon} alt="Gem Icon" className="mr-2 inline w-9" />
+          <GemIcon className="mr-2 inline w-9" />
           <span cy-data="pointBalance">{points.toLocaleString()}</span>
         </div>
       </div>
