@@ -24,7 +24,7 @@ import PageTitle from "./components/PageTitle";
 
 type LoaderData = {
   notification?: NotificationData;
-  user?: Omit<User, "password" | "createdAt" | "updatedAt">;
+  user?: Omit<User, "password" | "createdAt" | "updatedAt" | "lastClaimedAt">;
 };
 
 export const meta: MetaFunction = () => {

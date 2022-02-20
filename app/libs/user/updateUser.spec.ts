@@ -21,6 +21,7 @@ describe("updateUser", () => {
         points: 500,
         createdAt: new Date(),
         updatedAt: new Date(),
+        lastClaimedAt: new Date(),
       },
       username: "jane",
       email: "jane@doe.com",
@@ -35,6 +36,7 @@ describe("updateUser", () => {
       points: input.user.points,
       createdAt: input.user.createdAt,
       updatedAt: new Date(),
+      lastClaimedAt: new Date(),
     };
 
     prismaMock.user.update.mockResolvedValue(expected);

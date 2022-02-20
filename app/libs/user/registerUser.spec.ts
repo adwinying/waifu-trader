@@ -33,6 +33,7 @@ describe("registerUser", () => {
       points: 500,
       createdAt: new Date(),
       updatedAt: new Date(),
+      lastClaimedAt: new Date(),
     };
 
     newUser = {

@@ -11,6 +11,7 @@ describe("claimWaifu", () => {
     points: 0,
     createdAt: new Date(),
     updatedAt: new Date(),
+    lastClaimedAt: new Date(),
   };
 
   const waifu: Waifu = {

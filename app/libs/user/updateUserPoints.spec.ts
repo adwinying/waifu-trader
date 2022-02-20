@@ -11,6 +11,7 @@ describe("updateUserPoints", () => {
     points: 0,
     createdAt: new Date(),
     updatedAt: new Date(),
+    lastClaimedAt: new Date(),
   };
 
   it("returns error if insufficient", () => {

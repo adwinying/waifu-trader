@@ -23,6 +23,7 @@ describe("authenticateUser", () => {
       points: 0,
       createdAt: new Date(),
       updatedAt: new Date(),
+      lastClaimedAt: new Date(),
     };
 
     prismaMock.user.findFirst.mockResolvedValue(expected);
@@ -39,6 +40,7 @@ describe("authenticateUser", () => {
       points: 0,
       createdAt: new Date(),
       updatedAt: new Date(),
+      lastClaimedAt: new Date(),
     };
 
     prismaMock.user.findFirst.mockResolvedValue(expected);
