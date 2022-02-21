@@ -6,15 +6,15 @@ export type ClaimUserPoints = {
   user: User;
 };
 
-export default async function claimUserPoints({ user }: ClaimUserPoints) {
-  const hoursUntilNextClaim = 3;
-  const pointsAwardedEachClaim = 500;
+export const HOURS_UNTIL_NEXT_CLAIM = 3;
+export const POINTS_AWARDED_EACH_CLAIM = 500;
 
+export default async function claimUserPoints({ user }: ClaimUserPoints) {
   const { lastClaimedAt } = user;
 
   const newClaimAvailableAt = new Date(lastClaimedAt.getTime());
   newClaimAvailableAt.setHours(
-    newClaimAvailableAt.getHours() + hoursUntilNextClaim,
+    newClaimAvailableAt.getHours() + HOURS_UNTIL_NEXT_CLAIM,
   );
 
   if (newClaimAvailableAt > new Date()) {
@@ -28,7 +28,7 @@ export default async function claimUserPoints({ user }: ClaimUserPoints) {
 
   return updateUserPoints({
     user,
-    pointChange: pointsAwardedEachClaim,
+    pointChange: POINTS_AWARDED_EACH_CLAIM,
     reason: "Gem claimed",
   });
 }
