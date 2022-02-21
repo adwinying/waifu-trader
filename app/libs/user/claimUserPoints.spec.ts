@@ -77,7 +77,7 @@ describe("claimUserPoints", () => {
 
   it("should update user points", async () => {
     const pointChange = 500;
-    const reason = "Gem claimed";
+    const reason = "Gems claimed";
 
     const newTimestamp = new Date(timestamp.getTime());
     newTimestamp.setHours(newTimestamp.getHours() + 3);

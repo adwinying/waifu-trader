@@ -29,6 +29,6 @@ export default async function claimUserPoints({ user }: ClaimUserPoints) {
   return updateUserPoints({
     user,
     pointChange: POINTS_AWARDED_EACH_CLAIM,
-    reason: "Gem claimed",
+    reason: "Gems claimed",
   });
 }
