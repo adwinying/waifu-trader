@@ -80,15 +80,18 @@ describe("points", () => {
 
         if (isZero) {
           cy.wrap($el)
-            .should("not.have.class", "text-success")
-            .should("not.have.class", "text-error")
+            .should("not.have.class", "text-success-content")
+            .should("not.have.class", "text-error-content")
             .should("have.text", "0");
 
           return;
         }
 
         cy.wrap($el)
-          .should("have.class", isPositive ? "text-success" : "text-error")
+          .should(
+            "have.class",
+            isPositive ? "text-success-content" : "text-error-content",
+          )
           .should("have.text", isPositive ? `+${points}` : points);
       });
   });

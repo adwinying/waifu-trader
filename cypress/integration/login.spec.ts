@@ -18,6 +18,7 @@ describe("login", () => {
     const email = "test@example.org";
     const password = "hashed_password";
 
+    cy.setupDb();
     cy.visit("/login");
     cy.get('input[name="email"]').type(email);
     cy.get('input[name="password"]').type(password);
