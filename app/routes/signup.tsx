@@ -2,6 +2,7 @@ import {
   ActionFunction,
   Form,
   LoaderFunction,
+  MetaFunction,
   redirect,
   useActionData,
   useTransition,
@@ -14,6 +15,10 @@ import { createUserSession, getAuthUser } from "~/utils/auth.server";
 import FormText from "~/components/FormText";
 import PageTitle from "~/components/PageTitle";
 import FormSubmitButton from "~/components/FormSubmitButton";
+
+export const meta: MetaFunction = () => ({
+  title: "Login - Waifu Trader",
+});
 
 export const validationSchema = z
   .object({

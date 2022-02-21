@@ -1,8 +1,12 @@
-import { LoaderFunction, useLoaderData } from "remix";
+import { LoaderFunction, MetaFunction, useLoaderData } from "remix";
 import PageTitle from "~/components/PageTitle";
 import GemIcon from "~/components/icons/GemIcon";
 import { requireUserSession } from "~/utils/auth.server";
 import db from "~/utils/db.server";
+
+export const meta: MetaFunction = () => ({
+  title: "Gems - Waifu Trader",
+});
 
 type LoaderData = {
   points: number;
