@@ -26,7 +26,7 @@ function Notification({ notification }: Props) {
 
   const alertClass = {
     success: "alert-success",
-    error: "alert-danger",
+    error: "alert-error",
     warning: "alert-warning",
     info: "alert-info",
   }[notification.type];
