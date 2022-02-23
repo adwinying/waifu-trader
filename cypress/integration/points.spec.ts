@@ -95,4 +95,100 @@ describe("points", () => {
           .should("have.text", isPositive ? `+${points}` : points);
       });
   });
+
+  it("should show time remaining until next claim not ready", () => {
+    cy.clock(new Date());
+
+    const user = {
+      username: "foo",
+      email: "foo@bar.com",
+      password: "secret",
+      lastClaimedAt: new Date(),
+    };
+    cy.seedDb({ user: [user] });
+    cy.login({ email: user.email });
+    cy.visit("/points");
+
+    cy.get('[cy-data="remainingHours"]').should("contain.text", "3h");
+
+    cy.tick(1000);
+    cy.get('[cy-data="remainingDays"]').should("be.empty");
+    cy.get('[cy-data="remainingHours"]').should("contain.text", "2h");
+    cy.get('[cy-data="remainingMinutes"]').should("contain.text", "59m");
+    cy.get('[cy-data="remainingSeconds"]').should("contain.text", "59s");
+  });
+
+  it("should show claim gem button if next claim ready", () => {
+    cy.clock(new Date());
+
+    const user = {
+      username: "foo",
+      email: "foo@bar.com",
+      password: "secret",
+      lastClaimedAt: new Date(),
+    };
+    cy.seedDb({ user: [user] });
+    cy.login({ email: user.email });
+    cy.visit("/points");
+
+    cy.get('[cy-data="remainingHours"]').should("contain.text", "3h");
+
+    cy.tick(1000 * 60 * 60 * 3 - 1000);
+    cy.get('[cy-data="remainingDays"]').should("be.empty");
+    cy.get('[cy-data="remainingHours"]').should("be.empty");
+    cy.get('[cy-data="remainingMinutes"]').should("be.empty");
+    cy.get('[cy-data="remainingSeconds"]').should("contain.text", "1s");
+
+    cy.tick(1000);
+    cy.get('[cy-data="claimGemBtn"]').should("exist");
+  });
+
+  it("should get extra points when claiming", () => {
+    const lastClaimedAt = new Date();
+    lastClaimedAt.setHours(lastClaimedAt.getHours() - 3);
+
+    const user = {
+      username: "foo",
+      email: "foo@bar.com",
+      password: "secret",
+      lastClaimedAt,
+    };
+    cy.seedDb({ user: [user] });
+    cy.login({ email: user.email });
+    cy.visit("/points");
+
+    cy.get('[cy-data="remainingDays"]').should("not.exist");
+    cy.get('[cy-data="remainingHours"]').should("not.exist");
+    cy.get('[cy-data="remainingMinutes"]').should("not.exist");
+    cy.get('[cy-data="remainingSeconds"]').should("not.exist");
+    cy.get('[cy-data="pointBalance"]').should("have.text", 0);
+
+    cy.get('[cy-data="claimGemBtn"]').click();
+
+    cy.url().should("eq", `${Cypress.config().baseUrl}/points`);
+    cy.get('.alert.alert-success [cy-data="notification-title"').should(
+      "contain.text",
+      "Successfully claimed gems.",
+    );
+    cy.get('[cy-data="pointBalance"]').should("have.text", 500);
+  });
+
+  it("should prevent gem claims if not ready", () => {
+    const user = {
+      username: "foo",
+      email: "foo@bar.com",
+      password: "secret",
+      lastClaimedAt: new Date(),
+    };
+    cy.seedDb({ user: [user] });
+
+    cy.login({ email: user.email });
+    cy.visit("/points", { method: "POST" });
+
+    cy.url().should("eq", `${Cypress.config().baseUrl}/points`);
+    cy.get('.alert.alert-error [cy-data="notification-title"').should(
+      "contain.text",
+      "Next claim is not ready",
+    );
+  });
 });

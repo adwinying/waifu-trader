@@ -1,8 +1,20 @@
-import { LoaderFunction, MetaFunction, useLoaderData } from "remix";
+import {
+  ActionFunction,
+  Form,
+  LoaderFunction,
+  MetaFunction,
+  redirect,
+  useLoaderData,
+} from "remix";
 import PageTitle from "~/components/PageTitle";
 import GemIcon from "~/components/icons/GemIcon";
 import { requireUserSession } from "~/utils/auth.server";
 import db from "~/utils/db.server";
+import useCountdown, { splitTime } from "~/hooks/useCountdown";
+import claimUserPoints, {
+  HOURS_UNTIL_NEXT_CLAIM,
+} from "~/libs/user/claimUserPoints";
+import { commitSession, getSession } from "~/utils/session.server";
 
 export const meta: MetaFunction = () => ({
   title: "Gems - Waifu Trader",
@@ -16,8 +28,8 @@ type LoaderData = {
     reason: string;
     createdAt: Date;
   }[];
+  nextClaimAt: Date;
 };
-
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await requireUserSession(request);
   const pointHistories = await db.pointHistory.findMany({
@@ -27,14 +39,54 @@ export const loader: LoaderFunction = async ({ request }) => {
     take: 20,
   });
 
+  const nextClaimAt = new Date(user.lastClaimedAt.getTime());
+  nextClaimAt.setHours(nextClaimAt.getHours() + HOURS_UNTIL_NEXT_CLAIM);
+
   return {
     points: user.points,
+    nextClaimAt,
     pointHistories,
   };
 };
 
+export const action: ActionFunction = async ({ request }) => {
+  const user = await requireUserSession(request);
+  const session = await getSession(request.headers.get("cookie"));
+
+  try {
+    await claimUserPoints({ user });
+  } catch (err) {
+    session.flash("notification", {
+      type: "error",
+      message:
+        err instanceof Error && err.message === "Next claim is not ready"
+          ? err.message
+          : "Failed to claim gems",
+    });
+
+    return redirect(request.url, {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    });
+  }
+
+  session.flash("notification", {
+    type: "success",
+    message: "Successfully claimed gems.",
+  });
+
+  return redirect(request.url, {
+    headers: {
+      "Set-Cookie": await commitSession(session),
+    },
+  });
+};
+
 export default function Points() {
-  const { points, pointHistories } = useLoaderData<LoaderData>();
+  const { points, pointHistories, nextClaimAt } = useLoaderData<LoaderData>();
+  const msRemaining = useCountdown(new Date(nextClaimAt));
+  const timeRemaining = splitTime(msRemaining);
 
   return (
     <div>
@@ -43,12 +95,37 @@ export default function Points() {
       <div className="mb-5">
         <div className="text-center text-xl">You currently have</div>
         <div
-          className="flex items-center justify-center
+          className="mb-1 flex items-center justify-center
           text-center text-5xl font-bold"
         >
           <GemIcon className="mr-2 inline w-9" />
           <span cy-data="pointBalance">{points.toLocaleString()}</span>
         </div>
+        {msRemaining > 0 ? (
+          <div className="text-center text-sm">
+            Next claim in
+            <span cy-data="remainingDays">
+              {timeRemaining.days ? `${timeRemaining.days}d ` : ""}
+            </span>
+            <span cy-data="remainingHours">
+              {timeRemaining.hours ? `${timeRemaining.hours}h ` : ""}
+            </span>
+            <span cy-data="remainingMinutes">
+              {timeRemaining.minutes ? `${timeRemaining.minutes}m ` : ""}
+            </span>
+            <span cy-data="remainingSeconds">{timeRemaining.seconds}s</span>
+          </div>
+        ) : (
+          <Form method="post" className="mt-2 text-center">
+            <button
+              cy-data="claimGemBtn"
+              className="btn btn-primary btn-sm"
+              type="submit"
+            >
+              Claim Gems
+            </button>
+          </Form>
+        )}
       </div>
 
       <div>
