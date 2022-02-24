@@ -146,7 +146,11 @@ export default function Points() {
             }
 
             return (
-              <div className="card-bordered card shadow" cy-data="pointHistory">
+              <div
+                className="card-bordered card shadow"
+                cy-data="pointHistory"
+                key={history.id}
+              >
                 <div className="flex flex-col-reverse justify-between p-5 md:flex-row md:items-center">
                   <div>
                     <div className="text-lg" cy-data="reason">
