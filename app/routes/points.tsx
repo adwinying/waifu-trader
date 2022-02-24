@@ -139,9 +139,7 @@ export default function Points() {
             let symbol = "";
 
             if (!isZero) {
-              textClass = isPositive
-                ? "text-success-content"
-                : "text-error-content";
+              textClass = isPositive ? "text-success" : "text-error";
               symbol = isPositive ? "+" : "-";
             }
 
