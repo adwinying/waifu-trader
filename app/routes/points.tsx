@@ -103,7 +103,7 @@ export default function Points() {
         </div>
         {msRemaining > 0 ? (
           <div className="text-center text-sm">
-            Next claim in
+            Next claim in{" "}
             <span cy-data="remainingDays">
               {timeRemaining.days ? `${timeRemaining.days}d ` : ""}
             </span>
