@@ -31,7 +31,7 @@ export default function Header({ userName, points }: Props) {
             // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
             tabIndex={-1}
           >
-            <MenuIcon className="h-8 w-8" />
+            <MenuIcon className="h-8 w-8 cursor-pointer hover:opacity-80" />
           </div>
           <ul
             // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
@@ -104,6 +104,7 @@ export default function Header({ userName, points }: Props) {
                 <div
                   // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
                   tabIndex={0}
+                  className="cursor-pointer hover:opacity-80"
                 >
                   <UserCircleIcon className="mr-1 inline w-8" />
                   <span cy-data="header-user-name">{userName}</span>
