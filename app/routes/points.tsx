@@ -5,12 +5,14 @@ import {
   MetaFunction,
   redirect,
   useLoaderData,
+  useTransition,
 } from "remix";
+import { RefreshIcon } from "@heroicons/react/outline";
+import { useEffect, useState } from "react";
 import PageTitle from "~/components/PageTitle";
 import GemIcon from "~/components/icons/GemIcon";
 import { requireUserSession } from "~/utils/auth.server";
 import db from "~/utils/db.server";
-import useCountdown, { splitTime } from "~/hooks/useCountdown";
 import claimUserPoints, {
   HOURS_UNTIL_NEXT_CLAIM,
 } from "~/libs/user/claimUserPoints";
@@ -85,8 +87,37 @@ export const action: ActionFunction = async ({ request }) => {
 
 export default function Points() {
   const { points, pointHistories, nextClaimAt } = useLoaderData<LoaderData>();
-  const msRemaining = useCountdown(new Date(nextClaimAt));
-  const timeRemaining = splitTime(msRemaining);
+
+  const getMsRemaining = (deadline: Date) => +new Date(deadline) - +new Date();
+  const [msRemaining, setMsRemaining] = useState(getMsRemaining(nextClaimAt));
+  const [timerId, setTimerId] = useState(0);
+  const updateCountdown = () => {
+    setMsRemaining(getMsRemaining(nextClaimAt));
+  };
+  // when msRemaining is updated, we clear out any existing timers and
+  // delay the updating of msRemaining by 1s
+  useEffect(() => {
+    clearTimeout(timerId);
+    setTimerId(setTimeout(updateCountdown, 1000) as unknown as number);
+
+    // we also clear out the timer before component dismount
+    return () => clearTimeout(timerId);
+  }, [msRemaining]);
+  // when nextClaimAt is updated, we clear out any existing timers and
+  // immidiately update msRemaining
+  useEffect(() => {
+    clearTimeout(timerId);
+    updateCountdown();
+  }, [nextClaimAt]);
+  const timeRemaining = {
+    days: Math.floor(msRemaining / (1000 * 60 * 60 * 24)),
+    hours: Math.floor((msRemaining / (1000 * 60 * 60)) % 24),
+    minutes: Math.floor((msRemaining / (1000 * 60)) % 60),
+    seconds: Math.floor((msRemaining / 1000) % 60),
+  };
+
+  const transition = useTransition();
+  const isSubmitting = transition.state === "submitting";
 
   return (
     <div>
@@ -120,9 +151,17 @@ export default function Points() {
             <button
               cy-data="claimGemBtn"
               className="btn btn-primary btn-sm"
+              disabled={isSubmitting}
               type="submit"
             >
-              Claim Gems
+              {isSubmitting ? (
+                <>
+                  <RefreshIcon className="mr-2 h-5 w-5 animate-spin" />
+                  Claiming...
+                </>
+              ) : (
+                "Claim Gems"
+              )}
             </button>
           </Form>
         )}
