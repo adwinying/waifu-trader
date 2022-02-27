@@ -12,7 +12,7 @@ import { z } from "zod";
 import FormSubmitButton from "~/components/FormSubmitButton";
 import FormText from "~/components/FormText";
 import PageTitle from "~/components/PageTitle";
-import authenticateUser from "~/libs/user/authenticateUser";
+import authenticateUser from "~/libs/authenticateUser";
 import { createUserSession, getAuthUser } from "~/utils/auth.server";
 import { commitSession } from "~/utils/session.server";
 

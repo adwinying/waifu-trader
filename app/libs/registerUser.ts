@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import db from "~/utils/db.server";
-import updateUserPoints from "~/libs/user/updateUserPoints";
+import updateUserPoints from "~/libs/updateUserPoints";
 
 export const SALT_ROUNDS = 10;
 

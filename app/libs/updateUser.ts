@@ -1,7 +1,7 @@
 import { User } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import db from "~/utils/db.server";
-import { SALT_ROUNDS } from "~/libs/user/registerUser";
+import { SALT_ROUNDS } from "~/libs/registerUser";
 
 export type UpdateUser = {
   user: User;

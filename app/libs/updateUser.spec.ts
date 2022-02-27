@@ -1,7 +1,7 @@
 import { User } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { prismaMock } from "~/../tests/database";
-import updateUser, { UpdateUser } from "~/libs/user/updateUser";
+import updateUser, { UpdateUser } from "~/libs/updateUser";
 import { SALT_ROUNDS } from "./registerUser";
 
 jest.mock("bcryptjs");

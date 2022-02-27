@@ -14,7 +14,7 @@ import { z } from "zod";
 import { zfd } from "zod-form-data";
 import FormText from "~/components/FormText";
 import PageTitle from "~/components/PageTitle";
-import updateUser from "~/libs/user/updateUser";
+import updateUser from "~/libs/updateUser";
 import { requireUserSession } from "~/utils/auth.server";
 import { commitSession, getSession } from "~/utils/session.server";
 import db from "~/utils/db.server";

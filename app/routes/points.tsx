@@ -15,7 +15,7 @@ import { requireUserSession } from "~/utils/auth.server";
 import db from "~/utils/db.server";
 import claimUserPoints, {
   HOURS_UNTIL_NEXT_CLAIM,
-} from "~/libs/user/claimUserPoints";
+} from "~/libs/claimUserPoints";
 import { commitSession, getSession } from "~/utils/session.server";
 
 export const meta: MetaFunction = () => ({
@@ -97,16 +97,16 @@ export default function Points() {
   // when msRemaining is updated, we clear out any existing timers and
   // delay the updating of msRemaining by 1s
   useEffect(() => {
-    clearTimeout(timerId);
-    setTimerId(setTimeout(updateCountdown, 1000) as unknown as number);
+    clearInterval(timerId);
+    setTimerId(setInterval(updateCountdown, 1000) as unknown as number);
 
     // we also clear out the timer before component dismount
-    return () => clearTimeout(timerId);
+    return () => clearInterval(timerId);
   }, [msRemaining]);
   // when nextClaimAt is updated, we clear out any existing timers and
   // immidiately update msRemaining
   useEffect(() => {
-    clearTimeout(timerId);
+    clearInterval(timerId);
     updateCountdown();
   }, [nextClaimAt]);
   const timeRemaining = {

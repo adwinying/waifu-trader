@@ -9,7 +9,7 @@ import {
 } from "remix";
 import { z } from "zod";
 import db from "~/utils/db.server";
-import registerUser from "~/libs/user/registerUser";
+import registerUser from "~/libs/registerUser";
 import { commitSession } from "~/utils/session.server";
 import { createUserSession, getAuthUser } from "~/utils/auth.server";
 import FormText from "~/components/FormText";

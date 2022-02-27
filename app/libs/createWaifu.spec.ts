@@ -1,5 +1,5 @@
 import { Waifu } from "@prisma/client";
-import createWaifu, { CreateWaifu } from "~/libs/waifu/createWaifu";
+import createWaifu, { CreateWaifu } from "~/libs/createWaifu";
 import { prismaMock } from "~/../tests/database";
 
 describe("createWaifu", () => {

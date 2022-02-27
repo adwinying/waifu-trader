@@ -1,9 +1,9 @@
 import { PointHistory, User } from "@prisma/client";
 import { prismaMock } from "~/../tests/database";
-import claimUserPoints from "~/libs/user/claimUserPoints";
-import updateUserPoints from "~/libs/user/updateUserPoints";
+import claimUserPoints from "~/libs/claimUserPoints";
+import updateUserPoints from "~/libs/updateUserPoints";
 
-jest.mock("~/libs/user/updateUserPoints");
+jest.mock("~/libs/updateUserPoints");
 const updateUserPointsMock = updateUserPoints as jest.MockedFn<
   typeof updateUserPoints
 >;
