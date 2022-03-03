@@ -1,6 +1,6 @@
 import { User } from "@prisma/client";
 import db from "~/utils/db.server";
-import updateUserPoints from "./updateUserPoints";
+import updateUserPoints from "~/libs/updateUserPoints";
 
 export type ClaimUserPoints = {
   user: User;
