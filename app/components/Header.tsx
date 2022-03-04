@@ -1,5 +1,6 @@
 import {
   CogIcon,
+  HeartIcon,
   LoginIcon,
   LogoutIcon,
   MenuIcon,
@@ -43,6 +44,12 @@ export default function Header({ userName, points }: Props) {
               <>
                 <li className="menu-title">
                   <span>Point Balance</span>
+                </li>
+                <li>
+                  <Link to="/waifus" className="hover:opacity-80">
+                    <HeartIcon className="mr-1 inline h-5 w-5" />
+                    Waifus
+                  </Link>
                 </li>
                 <li>
                   <Link to="/points" className="hover:opacity-80">
@@ -96,6 +103,10 @@ export default function Header({ userName, points }: Props) {
         <div className="hidden items-center space-x-4 md:flex">
           {isLoggedIn ? (
             <>
+              <Link to="/waifus" className="hover:opacity-80">
+                <HeartIcon className="mr-1 inline h-8" />
+                Waifus
+              </Link>
               <Link to="/points" className="hover:opacity-80">
                 <GemIcon className="mr-1 inline h-6" />
                 <span cy-data="header-points">{points?.toLocaleString()}</span>
