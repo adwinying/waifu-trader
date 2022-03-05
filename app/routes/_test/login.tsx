@@ -7,17 +7,19 @@ import db from "~/utils/db.server";
 import { commitSession } from "~/utils/session.server";
 
 export const action: ActionFunction = async ({ request }) => {
-  const { email, username, password }: TestAuthData = await request.json();
+  const { email, username, password, points }: TestAuthData =
+    await request.json();
 
   let user = await db.user.findUnique({ where: { email } });
 
   if (!user) {
     const newUserData = {
       email,
-      username: username ?? "test",
+      username: username ?? "foo",
       password: password
         ? bcrypt.hashSync(password, SALT_ROUNDS)
         : "$2a$10$.Ctzx/C5QYgs6I4ns6PDp.2Y.4kbwwUB0L6LPPy49t2moNGvT1mJG", // default: password
+      points,
     };
 
     user = await db.user.create({ data: newUserData });
