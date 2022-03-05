@@ -108,12 +108,12 @@ describe("signup", () => {
     cy.get('button[type="submit"]').click();
 
     cy.url().should("eq", `${Cypress.config().baseUrl}/`);
-    cy.get('[cy-data="notification-title"').should(
+    cy.get('[cy-data="notificationTitle"').should(
       "contain.text",
       "You have successfully signed up!",
     );
-    cy.get('[cy-data="header-user-name"]').should("contain.text", username);
-    cy.get('[cy-data="header-points"]').should("contain.text", initialPoints);
+    cy.get('[cy-data="headerUserName"]').should("contain.text", username);
+    cy.get('[cy-data="headerPoints"]').should("contain.text", initialPoints);
   });
 
   it("should redirect to home page if authenticated", () => {

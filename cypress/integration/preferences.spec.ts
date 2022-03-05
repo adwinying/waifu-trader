@@ -35,7 +35,7 @@ describe("preferences", () => {
     cy.get('button[cy-data="formSubmitButton"]').click();
 
     cy.url().should("eq", `${Cypress.config().baseUrl}/preferences`);
-    cy.get('[cy-data="notification-title"').should(
+    cy.get('[cy-data="notificationTitle"').should(
       "contain.text",
       "Preferences updated.",
     );
@@ -144,7 +144,7 @@ describe("preferences", () => {
     cy.get('button[cy-data="formSubmitButton"]').click();
 
     cy.url().should("eq", `${Cypress.config().baseUrl}/preferences`);
-    cy.get('[cy-data="notification-title"').should(
+    cy.get('[cy-data="notificationTitle"').should(
       "contain.text",
       "Preferences updated.",
     );

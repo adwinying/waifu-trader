@@ -163,7 +163,7 @@ describe("points", () => {
     cy.get('[cy-data="claimGemBtn"]').click();
 
     cy.url().should("eq", `${Cypress.config().baseUrl}/points`);
-    cy.get('.alert.alert-success [cy-data="notification-title"').should(
+    cy.get('.alert.alert-success [cy-data="notificationTitle"').should(
       "contain.text",
       "Successfully claimed gems.",
     );
@@ -183,7 +183,7 @@ describe("points", () => {
     cy.visit("/points", { method: "POST" });
 
     cy.url().should("eq", `${Cypress.config().baseUrl}/points`);
-    cy.get('.alert.alert-error [cy-data="notification-title"').should(
+    cy.get('.alert.alert-error [cy-data="notificationTitle"').should(
       "contain.text",
       "Next claim is not ready",
     );

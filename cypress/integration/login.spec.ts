@@ -45,11 +45,11 @@ describe("login", () => {
     cy.get('button[type="submit"]').click();
 
     cy.url().should("eq", `${Cypress.config().baseUrl}/`);
-    cy.get('[cy-data="notification-title"').should(
+    cy.get('[cy-data="notificationTitle"').should(
       "contain.text",
       "You have successfully logged in!",
     );
-    cy.get('[cy-data="header-user-name"]').should("contain.text", username);
+    cy.get('[cy-data="headerUserName"]').should("contain.text", username);
   });
 
   it("should redirect to destination after login if redirect query is specified", () => {
@@ -72,11 +72,11 @@ describe("login", () => {
     cy.get('button[type="submit"]').click();
 
     cy.url().should("eq", `${Cypress.config().baseUrl}/preferences`);
-    cy.get('[cy-data="notification-title"').should(
+    cy.get('[cy-data="notificationTitle"').should(
       "contain.text",
       "You have successfully logged in!",
     );
-    cy.get('[cy-data="header-user-name"]').should("contain.text", username);
+    cy.get('[cy-data="headerUserName"]').should("contain.text", username);
   });
 
   it("should redirect to home page if authenticated", () => {

@@ -12,7 +12,7 @@ describe("logout", () => {
     cy.login({ username, email });
 
     cy.visit("/");
-    cy.get('[cy-data="header-user-name"]').should("contain.text", username);
+    cy.get('[cy-data="headerUserName"]').should("contain.text", username);
 
     cy.visit({ url: "/logout", method: "POST" });
     cy.url().should("eq", `${Cypress.config().baseUrl}/login`);

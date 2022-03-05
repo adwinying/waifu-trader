@@ -54,7 +54,7 @@ export default function Header({ userName, points }: Props) {
                 <li>
                   <Link to="/points" className="hover:opacity-80">
                     <GemIcon className="mr-2 inline h-4 w-4" />
-                    <span cy-data="header-points">
+                    <span cy-data="headerPoints">
                       {points?.toLocaleString()}
                     </span>
                   </Link>
@@ -109,7 +109,7 @@ export default function Header({ userName, points }: Props) {
               </Link>
               <Link to="/points" className="hover:opacity-80">
                 <GemIcon className="mr-1 inline h-6" />
-                <span cy-data="header-points">{points?.toLocaleString()}</span>
+                <span cy-data="headerPoints">{points?.toLocaleString()}</span>
               </Link>
               <div className="dropdown-end dropdown">
                 <div
@@ -118,7 +118,7 @@ export default function Header({ userName, points }: Props) {
                   className="cursor-pointer hover:opacity-80"
                 >
                   <UserCircleIcon className="mr-1 inline w-8" />
-                  <span cy-data="header-user-name">{userName}</span>
+                  <span cy-data="headerUserName">{userName}</span>
                 </div>
                 <ul
                   // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
