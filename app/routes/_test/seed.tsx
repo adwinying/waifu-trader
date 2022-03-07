@@ -10,15 +10,23 @@ export const action: ActionFunction = async ({ request }) => {
   const reqData: SeedDataInput = await request.json();
   const result: SeedDataOutput = {};
 
-  result.user = reqData.user
-    ? await Promise.all(reqData.user.map((data) => db.user.create({ data })))
+  const user = reqData.user
+    ? Promise.all(reqData.user.map((data) => db.user.create({ data })))
     : undefined;
 
-  result.pointHistory = reqData.pointHistory
-    ? await Promise.all(
+  const pointHistory = reqData.pointHistory
+    ? Promise.all(
         reqData.pointHistory.map((data) => db.pointHistory.create({ data })),
       )
     : undefined;
+
+  const waifu = reqData.waifu
+    ? Promise.all(reqData.waifu.map((data) => db.waifu.create({ data })))
+    : undefined;
+
+  result.user = await user;
+  result.pointHistory = await pointHistory;
+  result.waifu = await waifu;
 
   return json(result);
 };
