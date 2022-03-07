@@ -12,7 +12,9 @@ import { TestAuthData } from "../../app/types/TestAuthData";
 // ***********************************************
 
 function setupDb() {
-  cy.exec("npx env-cmd -f .env.test npx prisma migrate reset --force");
+  cy.exec(
+    "npx env-cmd -f .env.test npx prisma migrate reset --force --skip-seed",
+  );
 }
 
 function seedDb(data: SeedDataInput) {
