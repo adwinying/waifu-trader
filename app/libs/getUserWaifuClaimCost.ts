@@ -12,7 +12,7 @@ export default async function getUserWaifuClaimCost({
 }: GetUserWaifuClaimCost) {
   const waifuCount = await getUserWaifuCount({ user });
 
-  const exponent = Math.floor(waifuCount / 10);
+  const exponent = Math.floor(waifuCount / 5);
   const multiplier = 2 ** exponent;
 
   return BASE_COST * multiplier;

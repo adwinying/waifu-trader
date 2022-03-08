@@ -99,7 +99,7 @@ describe("waifus", () => {
 
   it("should show correct amount of points to claim waifu", () => {
     const email = "foo@bar.com";
-    const waifus = new Array(100).fill(null).map((_, i) => ({
+    const waifus = new Array(50).fill(null).map((_, i) => ({
       name: `Waifu${i}`,
       series: "Series",
       description: "Some description",
