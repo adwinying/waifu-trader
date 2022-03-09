@@ -14,7 +14,7 @@ export default async function getUserWaifus({
 }: GetUserWaifus) {
   return db.waifu.findMany({
     where: { ownerId: user.id },
-    orderBy: { id: "asc" },
+    orderBy: { updatedAt: "desc" },
     skip: offset,
     take: count,
   });

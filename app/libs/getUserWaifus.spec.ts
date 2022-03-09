@@ -45,7 +45,7 @@ describe("getUserWaifus", () => {
     expect(results).toEqual(waifus);
     expect(prismaMock.waifu.findMany).toHaveBeenCalledWith({
       where: { ownerId: user.id },
-      orderBy: { id: "asc" },
+      orderBy: { updatedAt: "desc" },
       skip: 0,
       take: 20,
     });
@@ -61,7 +61,7 @@ describe("getUserWaifus", () => {
     expect(results).toEqual(waifus);
     expect(prismaMock.waifu.findMany).toHaveBeenCalledWith({
       where: { ownerId: user.id },
-      orderBy: { id: "asc" },
+      orderBy: { updatedAt: "desc" },
       skip: offset,
       take: 20,
     });
@@ -77,7 +77,7 @@ describe("getUserWaifus", () => {
     expect(results).toEqual(waifus);
     expect(prismaMock.waifu.findMany).toHaveBeenCalledWith({
       where: { ownerId: user.id },
-      orderBy: { id: "asc" },
+      orderBy: { updatedAt: "desc" },
       skip: 0,
       take: count,
     });
