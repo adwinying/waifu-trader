@@ -94,12 +94,12 @@ export default function Waifus() {
     <div>
       <PageTitle>Waifus</PageTitle>
 
-      <div className="flex items-center space-x-3">
-        <h2 className="text-3xl font-bold">
+      <div className="mb-8 items-center md:flex md:space-x-3">
+        <h2 className="mb-3 text-3xl font-bold md:mb-0">
           My Waifus <span cy-data="userWaifuCount">({waifuCount})</span>
         </h2>
 
-        <Form method="post" className="text-center">
+        <Form method="post">
           <button
             cy-data="claimWaifuBtn"
             className="btn btn-primary btn-sm"
