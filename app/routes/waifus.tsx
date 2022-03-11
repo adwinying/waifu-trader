@@ -1,4 +1,5 @@
 import { RefreshIcon } from "@heroicons/react/solid";
+import { Waifu } from "@prisma/client";
 import {
   ActionFunction,
   Form,
@@ -13,6 +14,7 @@ import PageTitle from "~/components/PageTitle";
 import claimUnclaimedWaifu from "~/libs/claimUnclaimedWaifu";
 import getUserWaifuClaimCost from "~/libs/getUserWaifuClaimCost";
 import getUserWaifuCount from "~/libs/getUserWaifuCount";
+import getUserWaifus from "~/libs/getUserWaifus";
 import updateUserPoints from "~/libs/updateUserPoints";
 import { requireUserSession } from "~/utils/auth.server";
 import { commitSession, getSession } from "~/utils/session.server";
@@ -22,6 +24,7 @@ export const meta: MetaFunction = () => ({
 });
 
 type LoaderData = {
+  waifus: Waifu[];
   waifuClaimCost: number;
   waifuCount: number;
   canClaimWaifu: boolean;
@@ -29,12 +32,14 @@ type LoaderData = {
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await requireUserSession(request);
 
+  const waifus = await getUserWaifus({ user });
   const waifuClaimCost = await getUserWaifuClaimCost({ user });
   const waifuCount = await getUserWaifuCount({ user });
   const pointBalance = user.points;
   const canClaimWaifu = waifuClaimCost <= pointBalance;
 
   return {
+    waifus,
     waifuClaimCost,
     waifuCount,
     canClaimWaifu,
@@ -84,7 +89,7 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export default function Waifus() {
-  const { waifuCount, waifuClaimCost, canClaimWaifu } =
+  const { waifus, waifuCount, waifuClaimCost, canClaimWaifu } =
     useLoaderData<LoaderData>();
 
   const transition = useTransition();
@@ -94,8 +99,8 @@ export default function Waifus() {
     <div>
       <PageTitle>Waifus</PageTitle>
 
-      <div className="mb-8 items-center md:flex md:space-x-3">
-        <h2 className="mb-3 text-3xl font-bold md:mb-0">
+      <div className="mb-8 items-center sm:flex sm:space-x-3">
+        <h2 className="mb-3 text-3xl font-bold sm:mb-0">
           My Waifus <span cy-data="userWaifuCount">({waifuCount})</span>
         </h2>
 
@@ -122,6 +127,25 @@ export default function Waifus() {
             )}
           </button>
         </Form>
+      </div>
+
+      <div className="mb-3 flex flex-wrap gap-6 md:gap-8">
+        {waifus.map((waifu) => (
+          <div
+            cy-data="waifuCard"
+            className="flex flex-col items-center space-y-3"
+          >
+            <div className="mask mask-squircle h-36 w-36 md:h-48 md:w-48">
+              <img
+                cy-data="waifuImg"
+                className="h-full w-full object-cover"
+                src={waifu.img}
+                alt={waifu.name}
+              />
+            </div>
+            <span cy-data="waifuName">{waifu.name}</span>
+          </div>
+        ))}
       </div>
     </div>
   );
