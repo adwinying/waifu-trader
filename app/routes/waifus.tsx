@@ -11,6 +11,7 @@ import {
 } from "remix";
 import GemIcon from "~/components/icons/GemIcon";
 import PageTitle from "~/components/PageTitle";
+import Pagination from "~/components/Pagination";
 import claimUnclaimedWaifu from "~/libs/claimUnclaimedWaifu";
 import getUserWaifuClaimCost from "~/libs/getUserWaifuClaimCost";
 import getUserWaifuCount from "~/libs/getUserWaifuCount";
@@ -28,11 +29,22 @@ type LoaderData = {
   waifuClaimCost: number;
   waifuCount: number;
   canClaimWaifu: boolean;
+  pagination: {
+    baseUrl: string;
+    perPage: number;
+    currentPage: number;
+    total: number;
+  };
 };
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await requireUserSession(request);
 
-  const waifus = await getUserWaifus({ user });
+  const url = new URL(request.url);
+  const count = 20;
+  const page = Number(url.searchParams.get("page") ?? 1);
+  const offset = (page - 1) * count;
+
+  const waifus = await getUserWaifus({ user, offset, count });
   const waifuClaimCost = await getUserWaifuClaimCost({ user });
   const waifuCount = await getUserWaifuCount({ user });
   const pointBalance = user.points;
@@ -43,6 +55,12 @@ export const loader: LoaderFunction = async ({ request }) => {
     waifuClaimCost,
     waifuCount,
     canClaimWaifu,
+    pagination: {
+      baseUrl: request.url,
+      perPage: count,
+      currentPage: page,
+      total: waifuCount,
+    },
   };
 };
 
@@ -89,7 +107,7 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export default function Waifus() {
-  const { waifus, waifuCount, waifuClaimCost, canClaimWaifu } =
+  const { waifus, waifuCount, waifuClaimCost, canClaimWaifu, pagination } =
     useLoaderData<LoaderData>();
 
   const transition = useTransition();
@@ -147,6 +165,13 @@ export default function Waifus() {
           </div>
         ))}
       </div>
+
+      <Pagination
+        baseUrl={pagination.baseUrl}
+        total={pagination.total}
+        perPage={pagination.perPage}
+        currentPage={pagination.currentPage}
+      />
     </div>
   );
 }

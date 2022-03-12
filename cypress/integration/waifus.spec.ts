@@ -129,7 +129,8 @@ describe("waifus", () => {
       series: "Series",
       description: "Some description",
       img: "http://example.org/baz.jpg",
-      createdAt: new Date(),
+      createdAt: new Date(i),
+      updatedAt: new Date(i),
     }));
 
     cy.seedDb({
@@ -151,12 +152,92 @@ describe("waifus", () => {
       .get('[cy-data="waifuImg"]')
       .each(($el, i) => {
         cy.wrap($el).should("have.attr", "src");
-        cy.wrap($el).should("have.attr", "alt", waifus[i].name);
+        cy.wrap($el).should(
+          "have.attr",
+          "alt",
+          waifus[waifus.length - 1 - i].name,
+        );
       })
 
       .get('[cy-data="waifuName"]')
       .each(($el, i) => {
-        cy.wrap($el).should("have.text", waifus[i].name);
+        cy.wrap($el).should("have.text", waifus[waifus.length - 1 - i].name);
       });
+  });
+
+  it("should paginate user's waifus", () => {
+    const email = "foo@bar.com";
+    const waifus = new Array(42).fill(null).map((_, i) => ({
+      name: `Waifu${i}`,
+      series: "Series",
+      description: "Some description",
+      img: "http://example.org/baz.jpg",
+      createdAt: new Date(i),
+      updatedAt: new Date(i),
+    }));
+
+    cy.seedDb({
+      user: [
+        {
+          username: "foo",
+          email,
+          password: "password",
+          waifus: { createMany: { data: waifus } },
+        },
+      ],
+    });
+    cy.login({ email });
+    cy.visit("/waifus");
+
+    cy.get('[cy-data="waifuCard"]')
+      .should("have.length", 20)
+      .get('[cy-data="waifuName"]')
+      .each(($el, i) => {
+        cy.wrap($el).should("have.text", waifus[waifus.length - 1 - i].name);
+      });
+    cy.get('[cy-data="paginationDescription"]').should(
+      "have.text",
+      `Showing 1 - 20 of ${waifus.length}`,
+    );
+    cy.get('[cy-data="paginationEntry"]').should(
+      "have.length",
+      Math.ceil(waifus.length / 20),
+    );
+
+    cy.get('[cy-data="paginationEntry"][data-page="2"]').click();
+    cy.get('[cy-data="waifuCard"]')
+      .should("have.length", 20)
+      .get('[cy-data="waifuName"]')
+      .each(($el, i) => {
+        cy.wrap($el).should("have.text", waifus[waifus.length - 21 - i].name);
+      });
+    cy.get('[cy-data="paginationDescription"]').should(
+      "have.text",
+      `Showing 21 - 40 of ${waifus.length}`,
+    );
+
+    cy.get('[cy-data="paginationEntry"][data-page="3"]').click();
+    cy.get('[cy-data="waifuCard"]')
+      .should("have.length", 2)
+      .get('[cy-data="waifuName"]')
+      .each(($el, i) => {
+        cy.wrap($el).should("have.text", waifus[waifus.length - 41 - i].name);
+      });
+    cy.get('[cy-data="paginationDescription"]').should(
+      "have.text",
+      `Showing 41 - 42 of ${waifus.length}`,
+    );
+
+    cy.get('[cy-data="paginationEntry"][data-page="1"]').click();
+    cy.get('[cy-data="waifuCard"]')
+      .should("have.length", 20)
+      .get('[cy-data="waifuName"]')
+      .each(($el, i) => {
+        cy.wrap($el).should("have.text", waifus[waifus.length - 1 - i].name);
+      });
+    cy.get('[cy-data="paginationDescription"]').should(
+      "have.text",
+      `Showing 1 - 20 of ${waifus.length}`,
+    );
   });
 });
