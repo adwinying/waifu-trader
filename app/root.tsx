@@ -22,10 +22,17 @@ import { commitSession, getSession } from "./utils/session.server";
 import { getAuthUser } from "./utils/auth.server";
 import PageTitle from "./components/PageTitle";
 import Footer from "./components/Footer";
+import getUserWaifuCount from "./libs/getUserWaifuCount";
 
 type LoaderData = {
   notification?: NotificationData;
-  user?: Omit<User, "password" | "createdAt" | "updatedAt" | "lastClaimedAt">;
+  user?: {
+    id: string;
+    username: string;
+    email: string;
+    points: number;
+    waifuCount: number;
+  };
 };
 
 export const meta: MetaFunction = () => {
@@ -55,6 +62,7 @@ export const loader: LoaderFunction = async ({ request }) => {
               username: user.username,
               email: user.email,
               points: user.points,
+              waifuCount: await getUserWaifuCount({ user }),
             },
     },
     {
@@ -80,7 +88,11 @@ function Layout({ children }: LayoutProps) {
         <Links />
       </head>
       <body className="flex min-h-screen flex-col">
-        <Header userName={user?.username} points={user?.points} />
+        <Header
+          userName={user?.username}
+          points={user?.points}
+          waifuCount={user?.waifuCount}
+        />
         <div className="container mx-auto mb-4 flex-1 px-4">
           {notification && <Notification notification={notification} />}
           {children}

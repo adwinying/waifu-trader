@@ -86,6 +86,7 @@ describe("waifus", () => {
     cy.get('[cy-data="claimWaifuBtn"]').should("not.have.attr", "disabled");
     cy.get('[cy-data="waifuCost"]').should("contain.text", "50");
     cy.get('[cy-data="userWaifuCount"]').should("contain.text", "0");
+    cy.get('[cy-data="headerWaifuCount"]').should("contain.text", "0");
     cy.get('[cy-data="claimWaifuBtn"]').click();
 
     cy.url().should("eq", `${Cypress.config().baseUrl}/waifus`);
@@ -93,8 +94,9 @@ describe("waifus", () => {
       "contain.text",
       "Successfully claimed waifu.",
     );
-    cy.get('[cy-data="headerPoints"]').should("contain.text", 500);
+    cy.get('[cy-data="headerPoints"]').should("contain.text", "500");
     cy.get('[cy-data="userWaifuCount"]').should("contain.text", "1");
+    cy.get('[cy-data="headerWaifuCount"]').should("contain.text", "1");
   });
 
   it("should show correct amount of points to claim waifu", () => {

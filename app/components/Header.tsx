@@ -14,9 +14,10 @@ import logo from "~/assets/img/logo.jpg";
 type Props = {
   userName: string | undefined;
   points: number | undefined;
+  waifuCount: number | undefined;
 };
 
-export default function Header({ userName, points }: Props) {
+export default function Header({ userName, points, waifuCount }: Props) {
   const isLoggedIn = userName !== undefined;
 
   return (
@@ -48,14 +49,20 @@ export default function Header({ userName, points }: Props) {
                 <li>
                   <Link to="/waifus" className="hover:opacity-80">
                     <HeartIcon className="mr-1 inline h-5 w-5" />
-                    Waifus
+                    <span>
+                      Waifus{" "}
+                      <span cy-data="headerWaifuCount">
+                        ({waifuCount?.toLocaleString() ?? "?"})
+                      </span>
+                    </span>
                   </Link>
                 </li>
                 <li>
                   <Link to="/points" className="hover:opacity-80">
                     <GemIcon className="mr-2 inline h-4 w-4" />
+                    Gems{" "}
                     <span cy-data="headerPoints">
-                      {points?.toLocaleString()}
+                      ({points?.toLocaleString() ?? "?"})
                     </span>
                   </Link>
                 </li>
@@ -105,11 +112,17 @@ export default function Header({ userName, points }: Props) {
             <>
               <Link to="/waifus" className="hover:opacity-80">
                 <HeartIcon className="mr-1 inline h-8" />
-                Waifus
+                Waifus{" "}
+                <span cy-data="headerWaifuCount">
+                  ({waifuCount?.toLocaleString() ?? "?"})
+                </span>
               </Link>
               <Link to="/points" className="hover:opacity-80">
                 <GemIcon className="mr-1 inline h-6" />
-                <span cy-data="headerPoints">{points?.toLocaleString()}</span>
+                Gems{" "}
+                <span cy-data="headerPoints">
+                  ({points?.toLocaleString() ?? "?"})
+                </span>
               </Link>
               <div className="dropdown-end dropdown">
                 <div
