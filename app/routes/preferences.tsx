@@ -128,7 +128,7 @@ export const action: ActionFunction = async ({ request }) => {
     message: "Preferences updated.",
   });
 
-  return redirect(request.url, {
+  return redirect("/preferences", {
     headers: {
       "Set-Cookie": await commitSession(session),
     },
