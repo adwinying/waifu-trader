@@ -21,6 +21,7 @@ import Notification, { NotificationData } from "~/components/Notification";
 import { commitSession, getSession } from "./utils/session.server";
 import { getAuthUser } from "./utils/auth.server";
 import PageTitle from "./components/PageTitle";
+import Footer from "./components/Footer";
 
 type LoaderData = {
   notification?: NotificationData;
@@ -78,12 +79,13 @@ function Layout({ children }: LayoutProps) {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="flex min-h-screen flex-col">
         <Header userName={user?.username} points={user?.points} />
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto mb-4 flex-1 px-4">
           {notification && <Notification notification={notification} />}
           {children}
         </div>
+        <Footer />
         <ScrollRestoration />
         <Scripts />
         {process.env.NODE_ENV === "development" && <LiveReload />}
