@@ -35,9 +35,9 @@ describe("points", () => {
 
   it("should show user's point histories", () => {
     const pointHistories = [
-      { reason: "reason1", points: 500, createdAt: new Date() },
-      { reason: "reason2", points: 0, createdAt: new Date() },
-      { reason: "reason3", points: -500, createdAt: new Date() },
+      { reason: "reason1", points: 500, createdAt: new Date(1000) },
+      { reason: "reason2", points: 0, createdAt: new Date(2000) },
+      { reason: "reason3", points: -500, createdAt: new Date(3000) },
     ];
 
     const user = {
@@ -58,7 +58,10 @@ describe("points", () => {
 
       .get('[cy-data="reason"]')
       .each(($el, i) => {
-        cy.wrap($el).should("have.text", pointHistories[i].reason);
+        cy.wrap($el).should(
+          "have.text",
+          pointHistories[pointHistories.length - 1 - i].reason,
+        );
       })
 
       .get('[cy-data="timestamp"]')
@@ -68,13 +71,13 @@ describe("points", () => {
           new Intl.DateTimeFormat("default", {
             dateStyle: "long",
             timeStyle: "medium",
-          }).format(pointHistories[i].createdAt),
+          }).format(pointHistories[pointHistories.length - 1 - i].createdAt),
         );
       })
 
       .get('[cy-data="pointChange"]')
       .each(($el, i) => {
-        const { points } = pointHistories[i];
+        const { points } = pointHistories[pointHistories.length - 1 - i];
         const isZero = points === 0;
         const isPositive = points >= 0;
 
@@ -136,7 +139,7 @@ describe("points", () => {
     cy.get('[cy-data="remainingMinutes"]').should("be.empty");
     cy.get('[cy-data="remainingSeconds"]').should("contain.text", "1s");
 
-    cy.tick(1000);
+    cy.tick(2000);
     cy.get('[cy-data="claimGemBtn"]').should("exist");
   });
 
