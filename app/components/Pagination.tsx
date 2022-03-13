@@ -19,9 +19,8 @@ export default function Pagination({
   const start = offset + 1;
   const end = Math.min(offset + perPage, total);
 
-  const pages = new Array(Math.ceil(total / perPage))
-    .fill(0)
-    .map((_, i) => i + 1);
+  const pageCount = Math.ceil(total / perPage);
+  const pages = new Array(pageCount).fill(0).map((_, i) => i + 1);
 
   const getPageUrl = (page: number): string => {
     const url = new URL(baseUrl);
@@ -40,17 +39,20 @@ export default function Pagination({
       </span>
 
       <div className="btn-group">
-        {pages.map((page) => (
-          <Link
-            className={`btn btn-sm ${page === currentPage ? "btn-active" : ""}`}
-            cy-data="paginationEntry"
-            data-page={page}
-            to={getPageUrl(page)}
-            prefetch="intent"
-          >
-            {page}
-          </Link>
-        ))}
+        {pageCount > 1 &&
+          pages.map((page) => (
+            <Link
+              className={`btn btn-sm ${
+                page === currentPage ? "btn-active" : ""
+              }`}
+              cy-data="paginationEntry"
+              data-page={page}
+              to={getPageUrl(page)}
+              prefetch="intent"
+            >
+              {page}
+            </Link>
+          ))}
       </div>
     </div>
   );
