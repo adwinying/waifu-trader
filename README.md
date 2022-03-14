@@ -2,11 +2,17 @@
 
 ## Tech Stack
 
+- Typescript
 - Prisma
-- PostgreSQL
+- MySQL
 - Remix
 - React
 - TailwindCSS
+- DaisyUI
+- Jest
+- Cypress
+- Prettier
+- ESLint
 
 ## Setup
 
