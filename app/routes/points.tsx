@@ -66,7 +66,7 @@ export const action: ActionFunction = async ({ request }) => {
           : "Failed to claim gems",
     });
 
-    return redirect("/points", {
+    return redirect(request.url, {
       headers: {
         "Set-Cookie": await commitSession(session),
       },
@@ -78,7 +78,7 @@ export const action: ActionFunction = async ({ request }) => {
     message: "Successfully claimed gems.",
   });
 
-  return redirect("/points", {
+  return redirect(request.url, {
     headers: {
       "Set-Cookie": await commitSession(session),
     },
