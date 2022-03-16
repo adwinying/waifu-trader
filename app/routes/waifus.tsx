@@ -50,9 +50,6 @@ export const loader: LoaderFunction = async ({ request }) => {
   const pointBalance = user.points;
   const canClaimWaifu = waifuClaimCost <= pointBalance;
 
-  // eslint-disable-next-line no-console
-  console.log("route:: ", request.url);
-
   return {
     waifus,
     waifuClaimCost,

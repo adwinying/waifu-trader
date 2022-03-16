@@ -12,11 +12,6 @@ export default function handleRequest(
     <RemixServer context={remixContext} url={request.url} />,
   );
 
-  // eslint-disable-next-line no-console
-  console.log("handleRequest: ", request.url);
-  // eslint-disable-next-line no-console
-  console.log("proto:", request.headers.get("X-Forwarded-Proto"));
-
   responseHeaders.set("Content-Type", "text/html");
 
   return new Response(`<!DOCTYPE html>${markup}`, {

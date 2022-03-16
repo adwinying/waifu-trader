@@ -8,6 +8,7 @@ import {
   Meta,
   MetaFunction,
   Outlet,
+  redirect,
   Scripts,
   ScrollRestoration,
   useCatch,
@@ -50,6 +51,22 @@ export const loader: LoaderFunction = async ({ request }) => {
     session.get("notification");
 
   const user = (await getAuthUser(request)) ?? undefined;
+
+  // automatically redirect to https
+  const url = new URL(request.url);
+  const { hostname } = url;
+  const proto = request.headers.get("X-Forwarded-Proto") ?? url.protocol;
+
+  url.host =
+    request.headers.get("X-Forwarded-Host") ??
+    request.headers.get("host") ??
+    url.host;
+  url.protocol = "https:";
+
+  if (proto === "http" && hostname !== "localhost")
+    return redirect(url.toString(), {
+      headers: { "X-Forwarded-Proto": "https" },
+    });
 
   return json<LoaderData>(
     {
