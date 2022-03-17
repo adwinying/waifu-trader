@@ -6,6 +6,7 @@ import {
 } from "@heroicons/react/outline";
 import { XIcon } from "@heroicons/react/solid";
 import { useEffect, useState } from "react";
+import { useTransition } from "remix";
 
 export type NotificationData = {
   type: "success" | "error" | "warning" | "info";
@@ -33,10 +34,15 @@ function Notification({ notification }: Props) {
 
   const [isActive, setIsActive] = useState(true);
   const onNotificationClose = () => setIsActive(false);
+  const { state } = useTransition();
 
   useEffect(() => {
     setIsActive(true);
   }, [notification]);
+
+  useEffect(() => {
+    if (state === "loading") setIsActive(false);
+  }, [state]);
 
   if (!isActive) return null;
 
