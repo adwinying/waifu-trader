@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
+
 import { prismaMock } from "~/../tests/database";
-import authenticateUser from "./authenticateUser";
+import authenticateUser from "~/libs/authenticateUser";
 
 describe("authenticateUser", () => {
   const input = {

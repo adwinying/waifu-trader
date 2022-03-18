@@ -1,6 +1,7 @@
 import { OwnerHistory, User, Waifu } from "@prisma/client";
+
 import { prismaMock } from "~/../tests/database";
-import claimWaifu from "./claimWaifu";
+import claimWaifu from "~/libs/claimWaifu";
 
 describe("claimWaifu", () => {
   const user: User = {

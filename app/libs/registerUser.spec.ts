@@ -1,5 +1,6 @@
 import { User, PointHistory } from "@prisma/client";
 import { Matcher } from "jest-mock-extended";
+
 import { prismaMock } from "~/../tests/database";
 import registerUser, { RegisterUser } from "~/libs/registerUser";
 import updateUserPoints, { UpdateUserPoints } from "~/libs/updateUserPoints";

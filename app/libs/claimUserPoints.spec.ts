@@ -1,4 +1,5 @@
 import { PointHistory, User } from "@prisma/client";
+
 import { prismaMock } from "~/../tests/database";
 import claimUserPoints from "~/libs/claimUserPoints";
 import updateUserPoints from "~/libs/updateUserPoints";

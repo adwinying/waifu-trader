@@ -1,4 +1,5 @@
 import fs from "fs";
+
 import createWaifu from "~/libs/createWaifu";
 
 interface WaifuJSON {

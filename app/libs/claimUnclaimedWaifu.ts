@@ -1,6 +1,7 @@
 import { User } from "@prisma/client";
+
+import claimWaifu from "~/libs/claimWaifu";
 import db from "~/utils/db.server";
-import claimWaifu from "./claimWaifu";
 
 export type ClaimUnclaimedWaifu = {
   user: User;

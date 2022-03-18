@@ -1,4 +1,5 @@
 import { ActionFunction, LoaderFunction, redirect } from "remix";
+
 import { destroyUserSession } from "~/utils/auth.server";
 
 export const loader: LoaderFunction = async () => {

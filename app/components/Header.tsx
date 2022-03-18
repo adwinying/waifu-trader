@@ -8,8 +8,9 @@ import {
   UserCircleIcon,
 } from "@heroicons/react/solid";
 import { Link } from "remix";
-import GemIcon from "~/components/icons/GemIcon";
+
 import logo from "~/assets/img/logo.jpg";
+import GemIcon from "~/components/icons/GemIcon";
 
 type Props = {
   userName: string | undefined;

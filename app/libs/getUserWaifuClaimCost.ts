@@ -1,4 +1,5 @@
 import { User } from "@prisma/client";
+
 import getUserWaifuCount from "~/libs/getUserWaifuCount";
 
 export type GetUserWaifuClaimCost = {

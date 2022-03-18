@@ -8,13 +8,14 @@ import {
   useTransition,
 } from "remix";
 import { z } from "zod";
-import db from "~/utils/db.server";
-import registerUser from "~/libs/registerUser";
-import { commitSession } from "~/utils/session.server";
-import { createUserSession, getAuthUser } from "~/utils/auth.server";
+
+import FormSubmitButton from "~/components/FormSubmitButton";
 import FormText from "~/components/FormText";
 import PageTitle from "~/components/PageTitle";
-import FormSubmitButton from "~/components/FormSubmitButton";
+import registerUser from "~/libs/registerUser";
+import { createUserSession, getAuthUser } from "~/utils/auth.server";
+import db from "~/utils/db.server";
+import { commitSession } from "~/utils/session.server";
 
 export const meta: MetaFunction = () => ({
   title: "Login - Waifu Trader",

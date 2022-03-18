@@ -9,9 +9,10 @@ import {
   useLoaderData,
   useTransition,
 } from "remix";
-import GemIcon from "~/components/icons/GemIcon";
+
 import PageTitle from "~/components/PageTitle";
 import Pagination from "~/components/Pagination";
+import GemIcon from "~/components/icons/GemIcon";
 import claimUnclaimedWaifu from "~/libs/claimUnclaimedWaifu";
 import getUserWaifuClaimCost from "~/libs/getUserWaifuClaimCost";
 import getUserWaifuCount from "~/libs/getUserWaifuCount";

@@ -1,6 +1,7 @@
 import { User } from "@prisma/client";
-import getUserWaifuClaimCost from "./getUserWaifuClaimCost";
-import getUserWaifuCount from "./getUserWaifuCount";
+
+import getUserWaifuClaimCost from "~/libs/getUserWaifuClaimCost";
+import getUserWaifuCount from "~/libs/getUserWaifuCount";
 
 jest.mock("~/libs/getUserWaifuCount");
 const getUserWaifuCountMock = getUserWaifuCount as jest.MockedFn<

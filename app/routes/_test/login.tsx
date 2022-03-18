@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import { ActionFunction } from "remix";
+
 import { SALT_ROUNDS } from "~/libs/registerUser";
 import { TestAuthData } from "~/types/TestAuthData";
 import { createUserSession } from "~/utils/auth.server";

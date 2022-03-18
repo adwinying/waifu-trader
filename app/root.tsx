@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import {
   json,
   Link,
@@ -14,16 +15,15 @@ import {
   useCatch,
   useLoaderData,
 } from "remix";
-import { User } from "@prisma/client";
-import { ReactNode } from "react";
-import tailwind from "~/tailwind.css";
+
+import Footer from "~/components/Footer";
 import Header from "~/components/Header";
 import Notification, { NotificationData } from "~/components/Notification";
-import { commitSession, getSession } from "./utils/session.server";
-import { getAuthUser } from "./utils/auth.server";
-import PageTitle from "./components/PageTitle";
-import Footer from "./components/Footer";
-import getUserWaifuCount from "./libs/getUserWaifuCount";
+import PageTitle from "~/components/PageTitle";
+import getUserWaifuCount from "~/libs/getUserWaifuCount";
+import tailwind from "~/tailwind.css";
+import { getAuthUser } from "~/utils/auth.server";
+import { commitSession, getSession } from "~/utils/session.server";
 
 type LoaderData = {
   notification?: NotificationData;

@@ -1,3 +1,5 @@
+import { RefreshIcon } from "@heroicons/react/outline";
+import { useEffect, useState } from "react";
 import {
   ActionFunction,
   Form,
@@ -7,15 +9,14 @@ import {
   useLoaderData,
   useTransition,
 } from "remix";
-import { RefreshIcon } from "@heroicons/react/outline";
-import { useEffect, useState } from "react";
+
 import PageTitle from "~/components/PageTitle";
 import GemIcon from "~/components/icons/GemIcon";
-import { requireUserSession } from "~/utils/auth.server";
-import db from "~/utils/db.server";
 import claimUserPoints, {
   HOURS_UNTIL_NEXT_CLAIM,
 } from "~/libs/claimUserPoints";
+import { requireUserSession } from "~/utils/auth.server";
+import db from "~/utils/db.server";
 import { commitSession, getSession } from "~/utils/session.server";
 
 export const meta: MetaFunction = () => ({

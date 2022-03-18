@@ -1,4 +1,5 @@
 import { Prisma } from "@prisma/client";
+
 import registerUser from "~/libs/registerUser";
 import db from "~/utils/db.server";
 

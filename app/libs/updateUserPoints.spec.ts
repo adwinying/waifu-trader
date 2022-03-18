@@ -1,6 +1,7 @@
 import { PointHistory, User } from "@prisma/client";
+
 import { prismaMock } from "~/../tests/database";
-import updateUserPoints from "./updateUserPoints";
+import updateUserPoints from "~/libs/updateUserPoints";
 
 describe("updateUserPoints", () => {
   const user: User = {

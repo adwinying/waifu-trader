@@ -1,6 +1,7 @@
 import { User, Waifu } from "@prisma/client";
+
 import { prismaMock } from "~/../tests/database";
-import getUserWaifus from "./getUserWaifus";
+import getUserWaifus from "~/libs/getUserWaifus";
 
 describe("getUserWaifus", () => {
   const user: User = {

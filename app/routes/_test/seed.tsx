@@ -1,4 +1,5 @@
 import { ActionFunction, json, LoaderFunction } from "remix";
+
 import { SeedDataInput, SeedDataOutput } from "~/types/SeedData";
 import db from "~/utils/db.server";
 

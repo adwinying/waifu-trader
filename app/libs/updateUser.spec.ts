@@ -1,8 +1,9 @@
 import { User } from "@prisma/client";
 import bcrypt from "bcryptjs";
+
 import { prismaMock } from "~/../tests/database";
+import { SALT_ROUNDS } from "~/libs/registerUser";
 import updateUser, { UpdateUser } from "~/libs/updateUser";
-import { SALT_ROUNDS } from "./registerUser";
 
 jest.mock("bcryptjs");
 const bcryptMock = bcrypt as jest.MockedObjectDeep<typeof bcrypt>;

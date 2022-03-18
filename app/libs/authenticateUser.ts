@@ -1,4 +1,5 @@
 import bcrypt from "bcryptjs";
+
 import db from "~/utils/db.server";
 
 export type AuthenticateUser = {

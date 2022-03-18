@@ -8,6 +8,8 @@ module.exports = {
     "plugin:react/recommended",
     "airbnb",
     "plugin:@typescript-eslint/recommended",
+    "plugin:import/recommended",
+    "plugin:import/typescript",
     "plugin:cypress/recommended",
     "plugin:prettier/recommended",
   ],
@@ -19,7 +21,6 @@ module.exports = {
     ecmaVersion: 13,
     sourceType: "module",
   },
-  plugins: ["react", "@typescript-eslint", "import"],
   rules: {
     // suppress errors for missing 'import React' in files
     "react/react-in-jsx-scope": "off",
@@ -39,6 +40,17 @@ module.exports = {
         jsx: "never",
         ts: "never",
         tsx: "never",
+      },
+    ],
+    // define import order
+    "import/order": [
+      "error",
+      {
+        "newlines-between": "always",
+        alphabetize: {
+          order: "asc",
+          caseInsensitive: false,
+        },
       },
     ],
     // override label-control association settings

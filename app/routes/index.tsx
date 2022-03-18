@@ -1,4 +1,5 @@
 import { Link, LoaderFunction, useLoaderData } from "remix";
+
 import { getAuthUser } from "~/utils/auth.server";
 
 type LoaderData = {

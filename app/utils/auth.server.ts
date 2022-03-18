@@ -1,7 +1,8 @@
 import { User } from "@prisma/client";
 import { redirect } from "remix";
+
+import db from "~/utils/db.server";
 import { destroySession, getSession } from "~/utils/session.server";
-import db from "./db.server";
 
 export const createUserSession = async (user: User) => {
   const session = await getSession();

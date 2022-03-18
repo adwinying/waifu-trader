@@ -1,6 +1,7 @@
 import { Waifu } from "@prisma/client";
-import createWaifu, { CreateWaifu } from "~/libs/createWaifu";
+
 import { prismaMock } from "~/../tests/database";
+import createWaifu, { CreateWaifu } from "~/libs/createWaifu";
 
 describe("createWaifu", () => {
   let input: CreateWaifu;

@@ -1,6 +1,7 @@
 import { OwnerHistory, User, Waifu } from "@prisma/client";
+
 import { prismaMock } from "~/../tests/database";
-import claimUnclaimedWaifu from "./claimUnclaimedWaifu";
+import claimUnclaimedWaifu from "~/libs/claimUnclaimedWaifu";
 import claimWaifu from "~/libs/claimWaifu";
 
 jest.mock("~/libs/claimWaifu");
