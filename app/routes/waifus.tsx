@@ -151,6 +151,7 @@ export default function Waifus() {
       <div className="mb-3 flex flex-wrap gap-6 md:gap-8">
         {waifus.map((waifu) => (
           <div
+            key={waifu.id}
             cy-data="waifuCard"
             className="flex flex-col items-center space-y-3"
           >
