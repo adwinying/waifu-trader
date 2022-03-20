@@ -93,7 +93,7 @@ export const action: ActionFunction = async ({ request }) => {
           : "Failed to claim waifu",
     });
 
-    return redirect(request.url, {
+    return redirect("/waifus", {
       headers: {
         "Set-Cookie": await commitSession(session),
       },
