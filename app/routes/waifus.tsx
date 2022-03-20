@@ -1,5 +1,6 @@
 import { RefreshIcon } from "@heroicons/react/solid";
 import { Waifu } from "@prisma/client";
+import { ReactEventHandler, useRef } from "react";
 import {
   ActionFunction,
   Form,
@@ -30,6 +31,7 @@ type LoaderData = {
   waifuClaimCost: number;
   waifuCount: number;
   canClaimWaifu: boolean;
+  isClaimed: boolean;
   pagination: {
     baseUrl: string;
     perPage: number;
@@ -43,7 +45,9 @@ export const loader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url);
   const count = 20;
   const page = Number(url.searchParams.get("page") ?? 1);
+  const isClaimed = Number(url.searchParams.get("isClaimed")) === 1;
   const offset = (page - 1) * count;
+  url.searchParams.delete("isClaimed");
 
   const waifus = await getUserWaifus({ user, offset, count });
   const waifuClaimCost = await getUserWaifuClaimCost({ user });
@@ -56,8 +60,9 @@ export const loader: LoaderFunction = async ({ request }) => {
     waifuClaimCost,
     waifuCount,
     canClaimWaifu,
+    isClaimed,
     pagination: {
-      baseUrl: request.url,
+      baseUrl: url.toString(),
       perPage: count,
       currentPage: page,
       total: waifuCount,
@@ -100,7 +105,7 @@ export const action: ActionFunction = async ({ request }) => {
     message: "Successfully claimed waifu.",
   });
 
-  return redirect(request.url, {
+  return redirect("/waifus?isClaimed=1", {
     headers: {
       "Set-Cookie": await commitSession(session),
     },
@@ -108,11 +113,31 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export default function Waifus() {
-  const { waifus, waifuCount, waifuClaimCost, canClaimWaifu, pagination } =
-    useLoaderData<LoaderData>();
+  const {
+    waifus,
+    waifuCount,
+    waifuClaimCost,
+    canClaimWaifu,
+    isClaimed,
+    pagination,
+  } = useLoaderData<LoaderData>();
 
   const transition = useTransition();
   const isSubmitting = transition.state === "submitting";
+  const firstWaifuRef = useRef<HTMLImageElement>(null);
+
+  const animateImage: ReactEventHandler<HTMLImageElement> = () => {
+    if (!isClaimed) return;
+
+    const firstWaifuImg = firstWaifuRef.current;
+    if (firstWaifuImg === null) return;
+
+    firstWaifuImg.style.transform = "Scale(1.1)";
+
+    setTimeout(() => {
+      firstWaifuImg.style.transform = "Scale(1.0)";
+    }, 150);
+  };
 
   return (
     <div>
@@ -149,18 +174,24 @@ export default function Waifus() {
       </div>
 
       <div className="mb-3 flex flex-wrap gap-6 md:gap-8">
-        {waifus.map((waifu) => (
+        {waifus.map((waifu, i) => (
           <div
             key={waifu.id}
             cy-data="waifuCard"
             className="flex flex-col items-center space-y-3"
           >
-            <div className="mask mask-squircle h-36 w-36 md:h-48 md:w-48">
+            <div
+              className="mask mask-squircle h-36 w-36
+                transition-all duration-150 ease-in-out
+                md:h-48 md:w-48"
+              ref={i === 0 ? firstWaifuRef : undefined}
+            >
               <img
                 cy-data="waifuImg"
                 className="h-full w-full object-cover"
                 src={waifu.img}
                 alt={waifu.name}
+                onLoad={i === 0 ? animateImage : undefined}
               />
             </div>
             <span cy-data="waifuName">{waifu.name}</span>
