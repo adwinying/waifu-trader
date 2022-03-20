@@ -92,9 +92,8 @@ export default function Points() {
   const getMsRemaining = (deadline: Date) => +new Date(deadline) - +new Date();
   const [msRemaining, setMsRemaining] = useState(getMsRemaining(nextClaimAt));
   const [timerId, setTimerId] = useState(0);
-  const updateCountdown = () => {
-    setMsRemaining(getMsRemaining(nextClaimAt));
-  };
+  const updateCountdown = () => setMsRemaining(getMsRemaining(nextClaimAt));
+
   // when msRemaining is updated, we clear out any existing timers and
   // delay the updating of msRemaining by 1s
   useEffect(() => {

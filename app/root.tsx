@@ -18,6 +18,7 @@ import {
 
 import Footer from "~/components/Footer";
 import Header from "~/components/Header";
+import LoadingIndicator from "~/components/LoadingIndicator";
 import Notification, { NotificationData } from "~/components/Notification";
 import PageTitle from "~/components/PageTitle";
 import getUserWaifuCount from "~/libs/getUserWaifuCount";
@@ -115,6 +116,7 @@ function Layout({ children }: LayoutProps) {
           {children}
         </div>
         <Footer />
+        <LoadingIndicator />
         <ScrollRestoration />
         <Scripts />
         {process.env.NODE_ENV === "development" && <LiveReload />}
