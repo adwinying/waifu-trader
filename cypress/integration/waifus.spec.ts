@@ -89,7 +89,7 @@ describe("waifus", () => {
     cy.get('[cy-data="headerWaifuCount"]').should("contain.text", "0");
     cy.get('[cy-data="claimWaifuBtn"]').click();
 
-    cy.url().should("eq", `${Cypress.config().baseUrl}/waifus`);
+    cy.url().should("eq", `${Cypress.config().baseUrl}/waifus?isClaimed=1`);
     cy.get('.alert.alert-success [cy-data="notificationTitle"]').should(
       "contain.text",
       "Successfully claimed waifu.",
