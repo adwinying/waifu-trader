@@ -22,7 +22,7 @@ import db from "~/utils/db.server";
 import { commitSession, getSession } from "~/utils/session.server";
 
 export const meta: MetaFunction = () => ({
-  title: "Login - Waifu Trader",
+  title: "Preferences - Waifu Trader",
 });
 
 export const validationSchema = z
