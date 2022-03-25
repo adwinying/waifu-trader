@@ -1,5 +1,5 @@
 import { RefreshIcon } from "@heroicons/react/outline";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   ActionFunction,
   Form,
@@ -12,6 +12,7 @@ import {
 
 import PageTitle from "~/components/PageTitle";
 import GemIcon from "~/components/icons/GemIcon";
+import useInterval from "~/hooks/useInterval";
 import claimUserPoints, {
   HOURS_UNTIL_NEXT_CLAIM,
 } from "~/libs/claimUserPoints";
@@ -91,24 +92,18 @@ export default function Points() {
 
   const getMsRemaining = (deadline: Date) => +new Date(deadline) - +new Date();
   const [msRemaining, setMsRemaining] = useState(getMsRemaining(nextClaimAt));
-  const [timerId, setTimerId] = useState(0);
-  const updateCountdown = () => setMsRemaining(getMsRemaining(nextClaimAt));
+  const updateCountdown = useCallback(
+    () => setMsRemaining(getMsRemaining(nextClaimAt)),
+    [nextClaimAt],
+  );
 
-  // when msRemaining is updated, we clear out any existing timers and
-  // delay the updating of msRemaining by 1s
-  useEffect(() => {
-    clearInterval(timerId);
-    setTimerId(setInterval(updateCountdown, 1000) as unknown as number);
+  useInterval(updateCountdown, 1000);
 
-    // we also clear out the timer before component dismount
-    return () => clearInterval(timerId);
-  }, [msRemaining]);
-  // when nextClaimAt is updated, we clear out any existing timers and
-  // immidiately update msRemaining
+  // when nextClaimAt is updated, we immediately update msRemaining
   useEffect(() => {
-    clearInterval(timerId);
     updateCountdown();
-  }, [nextClaimAt]);
+  }, [nextClaimAt, updateCountdown]);
+
   const timeRemaining = {
     days: Math.floor(msRemaining / (1000 * 60 * 60 * 24)),
     hours: Math.floor((msRemaining / (1000 * 60 * 60)) % 24),
