@@ -1,74 +1,59 @@
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTransition } from "remix";
+
+import useInterval from "~/hooks/useInterval";
 
 export default function LoadingIndicator() {
   const { location, state } = useTransition();
-  const timerRef = useRef<number>();
-  const $loader = useRef<HTMLDivElement>(null);
+  const completedTimerRef = useRef<number>();
+
+  const [width, setWidth] = useState(0);
+  const [rounds, setRounds] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
 
-  const setWidth = (width: number) => {
-    if (!$loader.current) return;
+  const isActive = location && state !== "idle";
+  const delay = rounds > 0 ? 1000 : 500;
 
-    $loader.current.style.width = `${width}%`;
+  const restartIndicator = () => {
+    // if loading animation was shown then set to 10%, else set to 0%
+    setWidth((w) => (w === 0 ? 0 : 10));
+    setRounds(0);
+    setIsVisible(true);
+  };
+  const advanceIndicator = () => {
+    setWidth((w) => w * 0.9 + 10);
+    setRounds((r) => r + 1);
+  };
+  const completeIndicator = () => {
+    // if loading animation was not shown then do nothing,
+    // else show loading animation filled
+    setWidth((w) => (w === 0 ? 0 : 100));
+
+    // delay fade off
+    completedTimerRef.current = setTimeout(() => {
+      setIsVisible(false);
+
+      // delay width reset
+      setTimeout(() => setWidth((w) => (w === 100 ? 0 : w)), 300);
+    }, 500) as unknown as number;
   };
 
-  const getWidth = () =>
-    $loader.current?.style.width
-      ? parseFloat($loader.current.style.width)
-      : null;
+  useInterval(advanceIndicator, isActive ? delay : null);
 
-  useLayoutEffect(() => {
-    const advanceIndicator = () => {
-      clearTimeout(timerRef.current);
+  useEffect(() => {
+    if (!isActive) return undefined;
 
-      const oldWidth = getWidth() ?? 0;
-      setWidth(oldWidth * 0.9 + 10);
+    clearTimeout(completedTimerRef.current);
 
-      timerRef.current = setTimeout(
-        advanceIndicator,
-        1000,
-      ) as unknown as number;
-    };
-
-    const restartIndicator = () => {
-      clearTimeout(timerRef.current);
-
-      setWidth(0);
-      setIsVisible(true);
-
-      timerRef.current = setTimeout(advanceIndicator, 500) as unknown as number;
-    };
-
-    const completeIndicator = () => {
-      clearTimeout(timerRef.current);
-
-      if (getWidth() === 0) return;
-
-      setWidth(100);
-
-      timerRef.current = setTimeout(() => {
-        setIsVisible(false);
-        setTimeout(() => {
-          if (getWidth() === 100) setWidth(0);
-        }, 300);
-      }, 500) as unknown as number;
-    };
-
-    if (!location || state === "idle" || !$loader.current) return undefined;
-
-    const wasLoading = (getWidth() ?? 0) !== 0;
     restartIndicator();
-    if (wasLoading) advanceIndicator();
 
     return completeIndicator;
-  }, [location, state]);
+  }, [isActive]);
 
   return (
     <div
-      ref={$loader}
       className="fixed top-0 left-0 transition-all duration-300 ease-in-out"
-      style={{ opacity: Number(isVisible) }}
+      style={{ width: `${width}%`, opacity: Number(isVisible) }}
     >
       <div className="absolute h-1 w-full bg-primary-focus" />
       <div className="absolute h-1 w-full bg-primary-focus blur-sm" />
