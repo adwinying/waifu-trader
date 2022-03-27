@@ -42,6 +42,7 @@ export default function Pagination({
         {pageCount > 1 &&
           pages.map((page) => (
             <Link
+              key={page}
               className={`btn btn-sm ${
                 page === currentPage ? "btn-active" : ""
               }`}
