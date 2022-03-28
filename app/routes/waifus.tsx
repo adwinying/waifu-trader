@@ -1,6 +1,6 @@
-import { RefreshIcon } from "@heroicons/react/solid";
+import { RefreshIcon, XIcon } from "@heroicons/react/solid";
 import { Waifu } from "@prisma/client";
-import { ReactEventHandler, useRef } from "react";
+import { ReactEventHandler, useRef, useState } from "react";
 import {
   ActionFunction,
   Form,
@@ -112,6 +112,29 @@ export const action: ActionFunction = async ({ request }) => {
   });
 };
 
+function WaifuDetail({ waifu }: { waifu: Waifu }) {
+  return (
+    <div className="flex flex-col space-y-4 md:flex-row md:space-x-6">
+      <div className="mask mask-squircle h-36 w-36 md:h-48 md:w-48">
+        <img
+          cy-data="waifuImg"
+          className="h-full w-full object-cover"
+          src={waifu.img}
+          alt={waifu.name}
+        />
+      </div>
+
+      <div className="flex-1">
+        <h1 className="text-3xl font-bold">{waifu.name}</h1>
+
+        <h3 className="mb-3 text-gray-400">{waifu.series}</h3>
+
+        <p className="break-words text-gray-600">{waifu.description}</p>
+      </div>
+    </div>
+  );
+}
+
 export default function Waifus() {
   const {
     waifus,
@@ -138,6 +161,8 @@ export default function Waifus() {
       firstWaifuImg.style.transform = "Scale(1.0)";
     }, 150);
   };
+
+  const [selectedWaifu, setSelectedWaifu] = useState<Waifu | null>(null);
 
   return (
     <div>
@@ -175,10 +200,12 @@ export default function Waifus() {
 
       <div className="mb-3 flex flex-wrap gap-6 md:gap-8">
         {waifus.map((waifu, i) => (
-          <div
+          <button
             key={waifu.id}
+            type="button"
             cy-data="waifuCard"
             className="flex flex-col items-center space-y-3"
+            onClick={() => setSelectedWaifu(waifu)}
           >
             <div
               className="mask mask-squircle h-36 w-36
@@ -194,9 +221,23 @@ export default function Waifus() {
                 onLoad={i === 0 ? animateImage : undefined}
               />
             </div>
-            <span cy-data="waifuName">{waifu.name}</span>
-          </div>
+            <span cy-data="waifuName" className="w-36 md:w-48">
+              {waifu.name}
+            </span>
+          </button>
         ))}
+      </div>
+
+      <div className={`modal ${selectedWaifu && "modal-open"}`}>
+        <div className="modal-box md:min-h-[500px] md:min-w-[80vw] md:p-10">
+          <div className="flex justify-end">
+            <button type="button" onClick={() => setSelectedWaifu(null)}>
+              <XIcon className="w-8 text-gray-500" />
+            </button>
+          </div>
+
+          {selectedWaifu && <WaifuDetail waifu={selectedWaifu} />}
+        </div>
       </div>
 
       <Pagination

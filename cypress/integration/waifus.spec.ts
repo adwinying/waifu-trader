@@ -242,4 +242,39 @@ describe("waifus", () => {
       `Showing 1 - 20 of ${waifus.length}`,
     );
   });
+
+  it("should waifu's info when clicked", () => {
+    const email = "foo@bar.com";
+    const waifus = new Array(12).fill(null).map((_, i) => ({
+      name: `Waifu${i}`,
+      series: "Series",
+      description: `Some description${i}`,
+      img: "http://example.org/baz.jpg",
+      createdAt: new Date(i),
+      updatedAt: new Date(i),
+    }));
+
+    cy.seedDb({
+      user: [
+        {
+          username: "foo",
+          email,
+          password: "password",
+          waifus: { createMany: { data: waifus } },
+        },
+      ],
+    });
+    cy.login({ email });
+    cy.visit("/waifus");
+
+    const randomIdx = Math.floor(Math.random() * 12);
+    const waifu = waifus[randomIdx];
+
+    cy.contains("button", waifu.name).click();
+
+    cy.get(".modal")
+      .should("contain.text", waifu.name)
+      .should("contain.text", waifu.series)
+      .should("contain.text", waifu.description);
+  });
 });
