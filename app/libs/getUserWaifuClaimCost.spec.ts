@@ -4,9 +4,7 @@ import getUserWaifuClaimCost from "~/libs/getUserWaifuClaimCost";
 import getUserWaifuCount from "~/libs/getUserWaifuCount";
 
 jest.mock("~/libs/getUserWaifuCount");
-const getUserWaifuCountMock = getUserWaifuCount as jest.MockedFn<
-  typeof getUserWaifuCount
->;
+const getUserWaifuCountMock = jest.mocked(getUserWaifuCount);
 
 describe("getWaifuClaimCost", () => {
   test.each([

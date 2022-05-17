@@ -6,9 +6,7 @@ import registerUser, { RegisterUser } from "~/libs/registerUser";
 import updateUserPoints, { UpdateUserPoints } from "~/libs/updateUserPoints";
 
 jest.mock("~/libs/updateUserPoints");
-const updateUserPointsMock = updateUserPoints as jest.MockedFn<
-  typeof updateUserPoints
->;
+const updateUserPointsMock = jest.mocked(updateUserPoints);
 
 describe("registerUser", () => {
   let input: RegisterUser;

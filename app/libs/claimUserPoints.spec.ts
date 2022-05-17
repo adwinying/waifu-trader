@@ -5,9 +5,7 @@ import claimUserPoints from "~/libs/claimUserPoints";
 import updateUserPoints from "~/libs/updateUserPoints";
 
 jest.mock("~/libs/updateUserPoints");
-const updateUserPointsMock = updateUserPoints as jest.MockedFn<
-  typeof updateUserPoints
->;
+const updateUserPointsMock = jest.mocked(updateUserPoints);
 
 describe("claimUserPoints", () => {
   let timestamp: Date;

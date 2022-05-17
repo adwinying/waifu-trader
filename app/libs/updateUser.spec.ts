@@ -6,7 +6,7 @@ import { SALT_ROUNDS } from "~/libs/registerUser";
 import updateUser, { UpdateUser } from "~/libs/updateUser";
 
 jest.mock("bcryptjs");
-const bcryptMock = bcrypt as jest.MockedObjectDeep<typeof bcrypt>;
+const bcryptMock = jest.mocked(bcrypt, true);
 
 describe("updateUser", () => {
   let input: UpdateUser;
