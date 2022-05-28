@@ -1,12 +1,13 @@
-import { RefreshIcon, XIcon } from "@heroicons/react/solid";
-import { Waifu } from "@prisma/client";
-import { ReactEventHandler, useRef, useState } from "react";
+import { RefreshIcon, TrashIcon, XIcon } from "@heroicons/react/solid";
+import { User, Waifu } from "@prisma/client";
+import { ReactEventHandler, useEffect, useRef, useState } from "react";
 import {
   ActionFunction,
   Form,
   LoaderFunction,
   MetaFunction,
   redirect,
+  Session,
   useLoaderData,
   useTransition,
 } from "remix";
@@ -15,9 +16,11 @@ import PageTitle from "~/components/PageTitle";
 import Pagination from "~/components/Pagination";
 import GemIcon from "~/components/icons/GemIcon";
 import claimUnclaimedWaifu from "~/libs/claimUnclaimedWaifu";
+import findWaifuByIdOrFail from "~/libs/findWaifuByIdOrFail";
 import getUserWaifuClaimCost from "~/libs/getUserWaifuClaimCost";
 import getUserWaifuCount from "~/libs/getUserWaifuCount";
 import getUserWaifus from "~/libs/getUserWaifus";
+import unclaimWaifu from "~/libs/unclaimWaifu";
 import updateUserPoints from "~/libs/updateUserPoints";
 import { requireUserSession } from "~/utils/auth.server";
 import { commitSession, getSession } from "~/utils/session.server";
@@ -70,9 +73,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   };
 };
 
-export const action: ActionFunction = async ({ request }) => {
-  const user = await requireUserSession(request);
-  const session = await getSession(request.headers.get("cookie"));
+const claimWaifu = async (user: User, session: Session) => {
   const waifuCost = await getUserWaifuClaimCost({ user });
   const reason = "Claimed waifu";
 
@@ -111,17 +112,127 @@ export const action: ActionFunction = async ({ request }) => {
     },
   });
 };
+const recycleWaifu = async (user: User, waifuId: string, session: Session) => {
+  let waifu: Waifu;
 
-function WaifuDetail({ waifu }: { waifu: Waifu }) {
+  // Check waifu exists
+  try {
+    waifu = await findWaifuByIdOrFail({ waifuId });
+  } catch (err) {
+    session.flash("notification", {
+      type: "error",
+      message:
+        err instanceof Error && err.message === "Waifu not found!"
+          ? "Waifu not found!"
+          : "Failed to recycle waifu",
+    });
+
+    return redirect("/waifus", {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    });
+  }
+
+  // Check user is waifu owner
+  const isUserWaifuOwner = waifu.ownerId === user.id;
+  if (!isUserWaifuOwner) {
+    session.flash("notification", {
+      type: "error",
+      message: "This is not your waifu!",
+    });
+
+    return redirect("/waifus", {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    });
+  }
+
+  // Unclaim waifu
+  try {
+    await unclaimWaifu({ waifu });
+  } catch (err) {
+    session.flash("notification", {
+      type: "error",
+      message: "Failed to recycle waifu",
+    });
+
+    return redirect("/waifus", {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    });
+  }
+
+  session.flash("notification", {
+    type: "success",
+    message: "Successfully recycled waifu.",
+  });
+
+  return redirect("/waifus", {
+    headers: {
+      "Set-Cookie": await commitSession(session),
+    },
+  });
+};
+export const action: ActionFunction = async ({ request }) => {
+  const user = await requireUserSession(request);
+  const session = await getSession(request.headers.get("cookie"));
+  const formData = await request.formData();
+  const { _action, waifuId } = Object.fromEntries(formData) as {
+    _action: string;
+    waifuId: string;
+  };
+
+  if (_action === "claim") return claimWaifu(user, session);
+  if (_action === "recycle") return recycleWaifu(user, waifuId, session);
+
+  return null;
+};
+
+function WaifuDetail({
+  waifu,
+  isOwner = false,
+}: {
+  waifu: Waifu;
+  isOwner: boolean;
+}) {
+  const transition = useTransition();
+  const isRecycling =
+    transition.submission?.formData.get("_action") === "recycle" &&
+    transition.state === "submitting";
+
   return (
     <div className="flex flex-col space-y-4 md:flex-row md:space-x-6">
-      <div className="mask mask-squircle h-36 w-36 md:h-48 md:w-48">
-        <img
-          cy-data="waifuImg"
-          className="h-full w-full object-cover"
-          src={waifu.img}
-          alt={waifu.name}
-        />
+      <div className="space-y-3">
+        <div className="mask mask-squircle h-36 w-36 md:h-48 md:w-48">
+          <img
+            cy-data="waifuImg"
+            className="h-full w-full object-cover"
+            src={waifu.img}
+            alt={waifu.name}
+          />
+        </div>
+        {isOwner && (
+          <Form method="post">
+            <input type="hidden" name="waifuId" value={waifu.id} />
+            <button
+              className="btn btn-error btn-block btn-sm"
+              type="submit"
+              disabled={isRecycling}
+              name="_action"
+              value="recycle"
+            >
+              {isRecycling ? (
+                <RefreshIcon className="mr-1 h-5 w-5 animate-spin" />
+              ) : (
+                <TrashIcon className="mr-1 h-5 w-5" />
+              )}
+              Recycle Waifu
+            </button>
+          </Form>
+        )}
       </div>
 
       <div className="flex-1">
@@ -146,7 +257,9 @@ export default function Waifus() {
   } = useLoaderData<LoaderData>();
 
   const transition = useTransition();
-  const isSubmitting = transition.state === "submitting";
+  const isClaiming =
+    transition.submission?.formData.get("_action") === "claim" &&
+    transition.state === "submitting";
   const firstWaifuRef = useRef<HTMLImageElement>(null);
 
   const animateImage: ReactEventHandler<HTMLImageElement> = () => {
@@ -164,6 +277,10 @@ export default function Waifus() {
 
   const [selectedWaifu, setSelectedWaifu] = useState<Waifu | null>(null);
 
+  useEffect(() => {
+    setSelectedWaifu(null);
+  }, [waifus]);
+
   return (
     <div>
       <PageTitle>Waifus</PageTitle>
@@ -178,9 +295,11 @@ export default function Waifus() {
             cy-data="claimWaifuBtn"
             className="btn btn-primary btn-sm"
             disabled={!canClaimWaifu}
+            name="_action"
+            value="claim"
             type="submit"
           >
-            {isSubmitting ? (
+            {isClaiming ? (
               <>
                 <RefreshIcon className="mr-2 h-5 w-5 animate-spin" />
                 Claiming...
@@ -236,7 +355,7 @@ export default function Waifus() {
             </button>
           </div>
 
-          {selectedWaifu && <WaifuDetail waifu={selectedWaifu} />}
+          {selectedWaifu && <WaifuDetail waifu={selectedWaifu} isOwner />}
         </div>
       </div>
 

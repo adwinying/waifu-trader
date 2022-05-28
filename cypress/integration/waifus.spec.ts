@@ -42,7 +42,7 @@ describe("waifus", () => {
     const points = 0;
 
     cy.login({ email, points });
-    cy.visit("/waifus", { method: "POST" });
+    cy.visit("/waifus", { method: "POST", body: { _action: "claim" } });
 
     cy.url().should("eq", `${Cypress.config().baseUrl}/waifus`);
     cy.get('.alert.alert-error [cy-data="notificationTitle"]').should(
@@ -276,5 +276,70 @@ describe("waifus", () => {
       .should("contain.text", waifu.name)
       .should("contain.text", waifu.series)
       .should("contain.text", waifu.description);
+  });
+
+  it("should be able to recycle waifu", () => {
+    const email = "foo@bar.com";
+    const waifus = [
+      {
+        name: "Waifu1",
+        series: "Series",
+        description: "Some description",
+        img: "http://example.org/baz.jpg",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ];
+
+    cy.seedDb({
+      user: [
+        {
+          username: "foo",
+          email,
+          password: "password",
+          waifus: { createMany: { data: waifus } },
+        },
+      ],
+    });
+    cy.login({ email });
+    cy.visit("/waifus");
+
+    const waifu = waifus[0];
+
+    cy.contains("button", waifu.name).click();
+
+    cy.get(".modal").contains("button", "Recycle Waifu").click();
+
+    cy.get('.alert.alert-success [cy-data="notificationTitle"]').should(
+      "contain.text",
+      "Successfully recycled waifu.",
+    );
+  });
+
+  it("should prevent users from recycling other user's waifus", () => {
+    const email = "foo@bar.com";
+    const waifu = {
+      id: "1235",
+      name: "Waifu1",
+      series: "Series",
+      description: "Some description",
+      img: "http://example.org/baz.jpg",
+      ownerId: "1234",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    cy.seedDb({ waifu: [waifu] });
+    cy.login({ email });
+    cy.visit("/waifus", {
+      method: "POST",
+      body: { _action: "recycle", waifuId: waifu.id },
+    });
+
+    cy.url().should("eq", `${Cypress.config().baseUrl}/waifus`);
+    cy.get('.alert.alert-error [cy-data="notificationTitle"]').should(
+      "contain.text",
+      "This is not your waifu!",
+    );
   });
 });
