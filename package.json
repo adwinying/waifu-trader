@@ -18,6 +18,8 @@
     "lint:ts": "tsc --noEmit --project tsconfig.json",
     "test": "jest",
     "test:coverage": "jest --coverage",
+    "test:e2e": "run-s cypress:dbseed cypress:run",
+    "cypress:dbseed": "rm -f ./prisma/test.db ./prisma/test.db.bak && env-cmd -f .env.test prisma migrate deploy && cp ./prisma/test.db ./prisma/test.db.bak",
     "cypress:server": "env-cmd -f .env.test npm run dev:base",
     "cypress:open": "start-server-and-test cypress:server 3002 'cypress open'",
     "cypress:run": "start-server-and-test cypress:server 3002 'cypress run'",

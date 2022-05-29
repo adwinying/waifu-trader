@@ -3,13 +3,11 @@
 
 generator client {
   provider = "prisma-client-js"
-  previewFeatures = ["referentialIntegrity"]
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
-  referentialIntegrity = "prisma"
 }
 
 model User {
@@ -31,7 +29,7 @@ model PointHistory {
   user      User     @relation(fields: [userId], references: [id])
   userId    String
   points    Int
-  reason    String   @db.Text
+  reason    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -40,7 +38,7 @@ model Waifu {
   id             String         @id @default(uuid())
   name           String
   series         String
-  description    String         @db.Text
+  description    String
   img            String
   owner          User?          @relation(fields: [ownerId], references: [id])
   ownerId        String?

@@ -4,7 +4,7 @@
 
 - Typescript
 - Prisma
-- MySQL
+- SQLite
 - Remix
 - React
 - TailwindCSS
@@ -17,6 +17,7 @@
 ## Setup
 
 ```bash
+$ npm ci
 $ npx prisma migrate dev
 $ npm run dev
 ```
@@ -32,7 +33,7 @@ $ npm test
 ### E2E (Cypress)
 
 ```bash
-$ npm cypress:run
+$ npm run test:e2e
 ```
 
 ## Waifu data

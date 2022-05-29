@@ -9,4 +9,6 @@ node_modules
 /data/waifus
 /data/upload.log
 /data/transformed.json
+/prisma/dev.db*
+/prisma/test.db*
 .env

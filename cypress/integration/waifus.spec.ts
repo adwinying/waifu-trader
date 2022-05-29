@@ -1,5 +1,6 @@
 describe("waifus", () => {
   beforeEach(() => {
+    Cypress.Cookies.debug(true);
     cy.setupDb();
   });
 
@@ -114,7 +115,7 @@ describe("waifus", () => {
           username: "foo",
           email,
           password: "password",
-          waifus: { createMany: { data: waifus } },
+          waifus: { create: waifus },
         },
       ],
     });
@@ -141,7 +142,7 @@ describe("waifus", () => {
           username: "foo",
           email,
           password: "password",
-          waifus: { createMany: { data: waifus } },
+          waifus: { create: waifus },
         },
       ],
     });
@@ -184,7 +185,7 @@ describe("waifus", () => {
           username: "foo",
           email,
           password: "password",
-          waifus: { createMany: { data: waifus } },
+          waifus: { create: waifus },
         },
       ],
     });
@@ -260,7 +261,7 @@ describe("waifus", () => {
           username: "foo",
           email,
           password: "password",
-          waifus: { createMany: { data: waifus } },
+          waifus: { create: waifus },
         },
       ],
     });
@@ -279,17 +280,15 @@ describe("waifus", () => {
   });
 
   it("should be able to recycle waifu", () => {
-    const email = "foo@bar.com";
-    const waifus = [
-      {
-        name: "Waifu1",
-        series: "Series",
-        description: "Some description",
-        img: "http://example.org/baz.jpg",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    ];
+    const email = "foo2@bar.com";
+    const waifu = {
+      name: "Waifu1",
+      series: "Series",
+      description: "Some description",
+      img: "http://example.org/baz.jpg",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
 
     cy.seedDb({
       user: [
@@ -297,14 +296,12 @@ describe("waifus", () => {
           username: "foo",
           email,
           password: "password",
-          waifus: { createMany: { data: waifus } },
+          waifus: { create: waifu },
         },
       ],
     });
     cy.login({ email });
     cy.visit("/waifus");
-
-    const waifu = waifus[0];
 
     cy.contains("button", waifu.name).click();
 
@@ -316,30 +313,41 @@ describe("waifus", () => {
     );
   });
 
-  it("should prevent users from recycling other user's waifus", () => {
-    const email = "foo@bar.com";
-    const waifu = {
-      id: "1235",
-      name: "Waifu1",
-      series: "Series",
-      description: "Some description",
-      img: "http://example.org/baz.jpg",
-      ownerId: "1234",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+  // it("should prevent users from recycling other user's waifus", () => {
+  //   const user1 = {
+  //     username: "user1",
+  //     email: "foo@example.org",
+  //     password: "password",
+  //     points: 1000,
+  //   };
+  //   const user2 = {
+  //     username: "user2",
+  //     email: "bar@example.org",
+  //     password: "password",
+  //     points: 1000,
+  //   };
 
-    cy.seedDb({ waifu: [waifu] });
-    cy.login({ email });
-    cy.visit("/waifus", {
-      method: "POST",
-      body: { _action: "recycle", waifuId: waifu.id },
-    });
+  //   const waifu = {
+  //     id: "1235",
+  //     name: "Waifu1",
+  //     series: "Series",
+  //     description: "Some description",
+  //     img: "http://example.org/baz.jpg",
+  //     createdAt: new Date(),
+  //     updatedAt: new Date(),
+  //   };
 
-    cy.url().should("eq", `${Cypress.config().baseUrl}/waifus`);
-    cy.get('.alert.alert-error [cy-data="notificationTitle"]').should(
-      "contain.text",
-      "This is not your waifu!",
-    );
-  });
+  //   cy.seedDb({ user: [user1, { ...user2, waifus: { create: [waifu] } }] });
+  //   cy.login({ email: user1.email });
+  //   cy.visit("/waifus", {
+  //     method: "POST",
+  //     body: { _action: "recycle", waifuId: waifu.id },
+  //   });
+
+  //   cy.url().should("eq", `${Cypress.config().baseUrl}/waifus`);
+  //   cy.get('.alert.alert-error [cy-data="notificationTitle"]').should(
+  //     "contain.text",
+  //     "This is not your waifu!",
+  //   );
+  // });
 });
