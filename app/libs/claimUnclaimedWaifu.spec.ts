@@ -5,7 +5,7 @@ import claimUnclaimedWaifu from "~/libs/claimUnclaimedWaifu";
 import claimWaifu from "~/libs/claimWaifu";
 
 jest.mock("~/libs/claimWaifu");
-const claimWaifuMock = claimWaifu as jest.MockedFn<typeof claimWaifu>;
+const claimWaifuMock = jest.mocked(claimWaifu);
 
 describe("claimUnclaimedWaifu", () => {
   const user: User = {

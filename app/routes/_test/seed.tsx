@@ -11,6 +11,9 @@ export const action: ActionFunction = async ({ request }) => {
   const reqData: SeedDataInput = await request.json();
   const result: SeedDataOutput = {};
 
+  // trigger a DB read to clear DB cache
+  await db.user.findMany();
+
   const user = reqData.user
     ? Promise.all(reqData.user.map((data) => db.user.create({ data })))
     : undefined;
