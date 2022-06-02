@@ -5,7 +5,6 @@ import {
   Form,
   LoaderFunction,
   MetaFunction,
-  redirect,
   useActionData,
   useLoaderData,
   useTransition,
@@ -19,7 +18,8 @@ import PageTitle from "~/components/PageTitle";
 import updateUser from "~/libs/updateUser";
 import { requireUserSession } from "~/utils/auth.server";
 import db from "~/utils/db.server";
-import { commitSession, getSession } from "~/utils/session.server";
+import { flashNotificationAndRedirect } from "~/utils/notification.server";
+import { getSession } from "~/utils/session.server";
 
 export const meta: MetaFunction = () => ({
   title: "Preferences - Waifu Trader",
@@ -124,15 +124,11 @@ export const action: ActionFunction = async ({ request }) => {
 
   const session = await getSession(request.headers.get("cookie"));
 
-  session.flash("notification", {
+  return flashNotificationAndRedirect({
+    session,
     type: "success",
     message: "Preferences updated.",
-  });
-
-  return redirect("/preferences", {
-    headers: {
-      "Set-Cookie": await commitSession(session),
-    },
+    redirectTo: "/preferences",
   });
 };
 

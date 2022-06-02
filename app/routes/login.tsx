@@ -15,7 +15,7 @@ import FormText from "~/components/FormText";
 import PageTitle from "~/components/PageTitle";
 import authenticateUser from "~/libs/authenticateUser";
 import { createUserSession, getAuthUser } from "~/utils/auth.server";
-import { commitSession } from "~/utils/session.server";
+import { flashNotificationAndRedirect } from "~/utils/notification.server";
 
 export const meta: MetaFunction = () => ({
   title: "Login - Waifu Trader",
@@ -49,17 +49,11 @@ export const action: ActionFunction = async ({ request }) => {
 
   const session = await createUserSession(user);
 
-  session.flash("notification", {
+  return flashNotificationAndRedirect({
+    session,
     type: "success",
     message: "You have successfully logged in!",
-  });
-
-  const redirectUrl = new URL(request.url).searchParams.get("redirect") ?? "/";
-
-  return redirect(redirectUrl, {
-    headers: {
-      "Set-Cookie": await commitSession(session),
-    },
+    redirectTo: new URL(request.url).searchParams.get("redirect") ?? "/",
   });
 };
 

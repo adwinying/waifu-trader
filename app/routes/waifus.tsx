@@ -6,7 +6,6 @@ import {
   Form,
   LoaderFunction,
   MetaFunction,
-  redirect,
   Session,
   useLoaderData,
   useTransition,
@@ -23,7 +22,8 @@ import getUserWaifus from "~/libs/getUserWaifus";
 import unclaimWaifu from "~/libs/unclaimWaifu";
 import updateUserPoints from "~/libs/updateUserPoints";
 import { requireUserSession } from "~/utils/auth.server";
-import { commitSession, getSession } from "~/utils/session.server";
+import { flashNotificationAndRedirect } from "~/utils/notification.server";
+import { getSession } from "~/utils/session.server";
 
 export const meta: MetaFunction = () => ({
   title: "Waifus - Waifu Trader",
@@ -86,30 +86,22 @@ const claimWaifu = async (user: User, session: Session) => {
       "No unclaimed waifus available",
     ];
 
-    session.flash("notification", {
+    return flashNotificationAndRedirect({
+      session,
       type: "error",
       message:
         err instanceof Error && approvedErrors.includes(err.message)
           ? err.message
           : "Failed to claim waifu",
-    });
-
-    return redirect("/waifus", {
-      headers: {
-        "Set-Cookie": await commitSession(session),
-      },
+      redirectTo: "/waifus",
     });
   }
 
-  session.flash("notification", {
+  return flashNotificationAndRedirect({
+    session,
     type: "success",
     message: "Successfully claimed waifu.",
-  });
-
-  return redirect("/waifus?isClaimed=1", {
-    headers: {
-      "Set-Cookie": await commitSession(session),
-    },
+    redirectTo: "/waifus?isClaimed=1",
   });
 };
 const recycleWaifu = async (user: User, waifuId: string, session: Session) => {
@@ -119,33 +111,25 @@ const recycleWaifu = async (user: User, waifuId: string, session: Session) => {
   try {
     waifu = await findWaifuByIdOrFail({ waifuId });
   } catch (err) {
-    session.flash("notification", {
+    return flashNotificationAndRedirect({
+      session,
       type: "error",
       message:
         err instanceof Error && err.message === "Waifu not found!"
           ? "Waifu not found!"
           : "Failed to recycle waifu",
-    });
-
-    return redirect("/waifus", {
-      headers: {
-        "Set-Cookie": await commitSession(session),
-      },
+      redirectTo: "/waifus",
     });
   }
 
   // Check user is waifu owner
   const isUserWaifuOwner = waifu.ownerId === user.id;
   if (!isUserWaifuOwner) {
-    session.flash("notification", {
+    return flashNotificationAndRedirect({
+      session,
       type: "error",
       message: "This is not your waifu!",
-    });
-
-    return redirect("/waifus", {
-      headers: {
-        "Set-Cookie": await commitSession(session),
-      },
+      redirectTo: "/waifus",
     });
   }
 
@@ -153,27 +137,19 @@ const recycleWaifu = async (user: User, waifuId: string, session: Session) => {
   try {
     await unclaimWaifu({ waifu });
   } catch (err) {
-    session.flash("notification", {
+    return flashNotificationAndRedirect({
+      session,
       type: "error",
       message: "Failed to recycle waifu",
-    });
-
-    return redirect("/waifus", {
-      headers: {
-        "Set-Cookie": await commitSession(session),
-      },
+      redirectTo: "/waifus",
     });
   }
 
-  session.flash("notification", {
+  return flashNotificationAndRedirect({
+    session,
     type: "success",
     message: "Successfully recycled waifu.",
-  });
-
-  return redirect("/waifus", {
-    headers: {
-      "Set-Cookie": await commitSession(session),
-    },
+    redirectTo: "/waifus",
   });
 };
 export const action: ActionFunction = async ({ request }) => {

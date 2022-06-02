@@ -18,6 +18,7 @@ import claimUserPoints, {
 } from "~/libs/claimUserPoints";
 import { requireUserSession } from "~/utils/auth.server";
 import db from "~/utils/db.server";
+import { flashNotificationAndRedirect } from "~/utils/notification.server";
 import { commitSession, getSession } from "~/utils/session.server";
 
 export const meta: MetaFunction = () => ({
@@ -60,30 +61,22 @@ export const action: ActionFunction = async ({ request }) => {
   try {
     await claimUserPoints({ user });
   } catch (err) {
-    session.flash("notification", {
+    return flashNotificationAndRedirect({
+      session,
       type: "error",
       message:
         err instanceof Error && err.message === "Next claim is not ready"
           ? err.message
           : "Failed to claim gems",
-    });
-
-    return redirect("/points", {
-      headers: {
-        "Set-Cookie": await commitSession(session),
-      },
+      redirectTo: "/points",
     });
   }
 
-  session.flash("notification", {
+  return flashNotificationAndRedirect({
+    session,
     type: "success",
     message: "Successfully claimed gems.",
-  });
-
-  return redirect("/points", {
-    headers: {
-      "Set-Cookie": await commitSession(session),
-    },
+    redirectTo: "/points",
   });
 };
 

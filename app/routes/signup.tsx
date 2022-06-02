@@ -15,7 +15,7 @@ import PageTitle from "~/components/PageTitle";
 import registerUser from "~/libs/registerUser";
 import { createUserSession, getAuthUser } from "~/utils/auth.server";
 import db from "~/utils/db.server";
-import { commitSession } from "~/utils/session.server";
+import { flashNotificationAndRedirect } from "~/utils/notification.server";
 
 export const meta: MetaFunction = () => ({
   title: "Login - Waifu Trader",
@@ -73,15 +73,11 @@ export const action: ActionFunction = async ({ request }) => {
 
   const session = await createUserSession(user);
 
-  session.flash("notification", {
+  return flashNotificationAndRedirect({
+    session,
     type: "success",
     message: "You have successfully signed up!",
-  });
-
-  return redirect("/", {
-    headers: {
-      "Set-Cookie": await commitSession(session),
-    },
+    redirectTo: "/",
   });
 };
 
