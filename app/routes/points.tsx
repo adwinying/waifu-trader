@@ -5,7 +5,6 @@ import {
   Form,
   LoaderFunction,
   MetaFunction,
-  redirect,
   useLoaderData,
   useTransition,
 } from "remix";
@@ -19,7 +18,7 @@ import claimUserPoints, {
 import { requireUserSession } from "~/utils/auth.server";
 import db from "~/utils/db.server";
 import { flashNotificationAndRedirect } from "~/utils/notification.server";
-import { commitSession, getSession } from "~/utils/session.server";
+import { getSession } from "~/utils/session.server";
 
 export const meta: MetaFunction = () => ({
   title: "Gems - Waifu Trader",
