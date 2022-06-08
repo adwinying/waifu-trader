@@ -243,7 +243,7 @@ describe("waifus", () => {
     );
   });
 
-  it("should waifu's info when clicked", () => {
+  it("should show waifu's info when clicked", () => {
     const email = "foo@bar.com";
     const waifus = new Array(12).fill(null).map((_, i) => ({
       name: `Waifu${i}`,
@@ -270,7 +270,7 @@ describe("waifus", () => {
     const randomIdx = Math.floor(Math.random() * 12);
     const waifu = waifus[randomIdx];
 
-    cy.contains("button", waifu.name).click();
+    cy.contains("a", waifu.name).click();
 
     cy.get(".modal")
       .should("contain.text", waifu.name)
@@ -302,7 +302,7 @@ describe("waifus", () => {
     cy.login({ email });
     cy.visit("/waifus");
 
-    cy.contains("button", waifu.name).click();
+    cy.contains("a", waifu.name).click();
 
     cy.get(".modal").contains("button", "Recycle Waifu").click();
 
@@ -338,10 +338,7 @@ describe("waifus", () => {
 
     cy.seedDb({ user: [user1, { ...user2, waifus: { create: [waifu] } }] });
     cy.login({ email: user1.email });
-    cy.visit("/waifus", {
-      method: "POST",
-      body: { _action: "recycle", waifuId: waifu.id },
-    });
+    cy.visit(`/waifus/${waifu.id}`, { method: "POST" });
 
     cy.url().should("eq", `${Cypress.config().baseUrl}/waifus`);
     cy.get('.alert.alert-error [cy-data="notificationTitle"]').should(
