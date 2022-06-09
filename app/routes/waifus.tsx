@@ -1,6 +1,6 @@
 import { RefreshIcon } from "@heroicons/react/solid";
 import { Waifu } from "@prisma/client";
-import { ReactEventHandler, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ActionFunction,
   Form,
@@ -14,6 +14,7 @@ import {
 
 import PageTitle from "~/components/PageTitle";
 import Pagination from "~/components/Pagination";
+import WaifuCard from "~/components/WaifuCard";
 import GemIcon from "~/components/icons/GemIcon";
 import claimUnclaimedWaifu from "~/libs/claimUnclaimedWaifu";
 import getUserWaifuClaimCost from "~/libs/getUserWaifuClaimCost";
@@ -127,20 +128,6 @@ export default function Waifus() {
 
   const transition = useTransition();
   const isClaiming = transition.state === "submitting";
-  const firstWaifuRef = useRef<HTMLImageElement>(null);
-
-  const animateImage: ReactEventHandler<HTMLImageElement> = () => {
-    if (!isClaimed) return;
-
-    const firstWaifuImg = firstWaifuRef.current;
-    if (firstWaifuImg === null) return;
-
-    firstWaifuImg.style.transform = "Scale(1.1)";
-
-    setTimeout(() => {
-      firstWaifuImg.style.transform = "Scale(1.0)";
-    }, 150);
-  };
 
   return (
     <div>
@@ -181,26 +168,11 @@ export default function Waifus() {
           <Link
             key={waifu.id}
             to={`/waifus/${waifu.id}?page=${pagination.currentPage}&pos=${positionY}`}
-            cy-data="waifuCard"
-            className="flex flex-col items-center space-y-3"
           >
-            <div
-              className="mask mask-squircle h-36 w-36
-                transition-all duration-150 ease-in-out
-                md:h-48 md:w-48"
-              ref={i === 0 ? firstWaifuRef : undefined}
-            >
-              <img
-                cy-data="waifuImg"
-                className="h-full w-full object-cover"
-                src={waifu.img}
-                alt={waifu.name}
-                onLoad={i === 0 ? animateImage : undefined}
-              />
-            </div>
-            <span cy-data="waifuName" className="w-36 md:w-48">
-              {waifu.name}
-            </span>
+            <WaifuCard
+              waifu={waifu}
+              shouldAnimateOnLoad={isClaimed && i === 0}
+            />
           </Link>
         ))}
       </div>
