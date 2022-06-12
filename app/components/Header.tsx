@@ -6,6 +6,7 @@ import {
   MenuIcon,
   PencilIcon,
   UserCircleIcon,
+  UserIcon,
 } from "@heroicons/react/solid";
 import { Link } from "remix";
 
@@ -69,6 +70,12 @@ export default function Header({ userName, points, waifuCount }: Props) {
                 </li>
                 <li className="menu-title">
                   <span>Menu</span>
+                </li>
+                <li>
+                  <Link to={`/profile/${userName}`}>
+                    <UserIcon className="mr-1 inline h-5 w-5" />
+                    <span>Profile</span>
+                  </Link>
                 </li>
                 <li>
                   <Link to="/preferences">
@@ -139,6 +146,12 @@ export default function Header({ userName, points, waifuCount }: Props) {
                   tabIndex={0}
                   className="dropdown-content menu rounded-box mt-2 w-52 bg-base-100 p-2 shadow-lg"
                 >
+                  <li>
+                    <Link to={`/profile/${userName}`}>
+                      <UserIcon className="mr-1 inline h-5 w-5" />
+                      <span>Profile</span>
+                    </Link>
+                  </li>
                   <li>
                     <Link to="/preferences">
                       <CogIcon className="mr-1 inline h-5 w-5" />

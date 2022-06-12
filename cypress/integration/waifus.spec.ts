@@ -279,7 +279,7 @@ describe("waifus", () => {
   });
 
   it("should be able to recycle waifu", () => {
-    const email = "foo2@bar.com";
+    const email = "foo@bar.com";
     const waifu = {
       name: "Waifu1",
       series: "Series",
