@@ -1,5 +1,6 @@
 import { User, Waifu } from "@prisma/client";
-import { LoaderFunction, useLoaderData } from "remix";
+import { useEffect, useState } from "react";
+import { Link, LoaderFunction, Outlet, useLoaderData } from "remix";
 
 import PageTitle from "~/components/PageTitle";
 import Pagination from "~/components/Pagination";
@@ -56,6 +57,15 @@ export const loader: LoaderFunction = async ({ params, request }) => {
 export default function UserProfile() {
   const { user, waifuCount, waifus, pagination } = useLoaderData<LoaderData>();
 
+  const [positionY, updatePositionY] = useState(0);
+  useEffect(() => {
+    const onScroll = () => updatePositionY(window.scrollY);
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <div>
       <PageTitle>{user.username}&apos;s Profile</PageTitle>
@@ -66,7 +76,12 @@ export default function UserProfile() {
 
       <div className="mb-3 flex flex-wrap gap-6 md:gap-8">
         {waifus.map((waifu) => (
-          <WaifuCard key={waifu.id} waifu={waifu} />
+          <Link
+            key={waifu.id}
+            to={`/profile/${user.username}/waifu/${waifu.id}?page=${pagination.currentPage}&pos=${positionY}`}
+          >
+            <WaifuCard key={waifu.id} waifu={waifu} />
+          </Link>
         ))}
       </div>
 
@@ -76,6 +91,8 @@ export default function UserProfile() {
         perPage={pagination.perPage}
         currentPage={pagination.currentPage}
       />
+
+      <Outlet />
     </div>
   );
 }

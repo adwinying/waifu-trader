@@ -82,4 +82,19 @@ describe("profile", () => {
       `Showing 1 - 20 of ${waifus.length}`,
     );
   });
+
+  it("should show waifu's info when clicked", () => {
+    cy.seedDb({ user: [{ ...user, waifus: { create: waifus } }] });
+    cy.visit(`/profile/${user.username}`);
+
+    const randomIdx = Math.floor(Math.random() * waifus.length);
+    const waifu = waifus[randomIdx];
+
+    cy.contains("a", waifu.name).click();
+
+    cy.get(".modal")
+      .should("contain.text", waifu.name)
+      .should("contain.text", waifu.series)
+      .should("contain.text", waifu.description);
+  });
 });

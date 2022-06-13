@@ -11,7 +11,7 @@ import {
 
 import findWaifuByIdOrFail from "~/libs/findWaifuByIdOrFail";
 import unclaimWaifu from "~/libs/unclaimWaifu";
-import { requireUserSession } from "~/utils/auth.server";
+import { getAuthUser, requireUserSession } from "~/utils/auth.server";
 import { flashNotificationAndRedirect } from "~/utils/notification.server";
 import { getSession } from "~/utils/session.server";
 
@@ -27,7 +27,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   let waifu;
   const { waifuId } = params;
-  const user = await requireUserSession(request);
+  const user = await getAuthUser(request);
 
   if (!waifuId) throw new Response("Not Found", { status: 404 });
 
@@ -39,7 +39,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   return {
     waifu,
-    isOwner: waifu.ownerId === user.id,
+    isOwner: waifu.ownerId && waifu.ownerId === user?.id,
     position,
   };
 };
