@@ -3,8 +3,8 @@ import { User } from "@prisma/client";
 import getUserWaifuClaimCost from "~/libs/getUserWaifuClaimCost";
 import getUserWaifuCount from "~/libs/getUserWaifuCount";
 
-jest.mock("~/libs/getUserWaifuCount");
-const getUserWaifuCountMock = jest.mocked(getUserWaifuCount);
+vi.mock("~/libs/getUserWaifuCount");
+const getUserWaifuCountMock = vi.mocked(getUserWaifuCount);
 
 describe("getWaifuClaimCost", () => {
   test.each([

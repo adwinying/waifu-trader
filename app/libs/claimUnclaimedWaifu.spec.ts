@@ -4,8 +4,8 @@ import { prismaMock } from "~/../tests/database";
 import claimUnclaimedWaifu from "~/libs/claimUnclaimedWaifu";
 import claimWaifu from "~/libs/claimWaifu";
 
-jest.mock("~/libs/claimWaifu");
-const claimWaifuMock = jest.mocked(claimWaifu);
+vi.mock("~/libs/claimWaifu");
+const claimWaifuMock = vi.mocked(claimWaifu);
 
 describe("claimUnclaimedWaifu", () => {
   const user: User = {

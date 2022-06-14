@@ -5,8 +5,8 @@ import { prismaMock } from "~/../tests/database";
 import { SALT_ROUNDS } from "~/libs/registerUser";
 import updateUser, { UpdateUser } from "~/libs/updateUser";
 
-jest.mock("bcryptjs");
-const bcryptMock = jest.mocked(bcrypt, true);
+vi.mock("bcryptjs");
+const bcryptMock = vi.mocked(bcrypt, true);
 
 describe("updateUser", () => {
   let input: UpdateUser;
