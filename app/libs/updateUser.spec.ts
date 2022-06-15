@@ -65,4 +65,19 @@ describe("updateUser", () => {
       },
     });
   });
+
+  test("should not update password if not given", async () => {
+    await updateUser({ ...input, password: undefined });
+
+    expect(bcryptMock.hash).not.toHaveBeenCalled();
+
+    expect(prismaMock.user.update).toHaveBeenCalledWith({
+      where: { id: expected.id },
+      data: {
+        username: expected.username,
+        email: expected.email,
+        password: undefined,
+      },
+    });
+  });
 });

@@ -1,4 +1,4 @@
-import { Waifu } from "@prisma/client";
+import { User, Waifu } from "@prisma/client";
 
 import { prismaMock } from "~/../tests/database";
 import createWaifu, { CreateWaifu } from "~/libs/createWaifu";
@@ -6,6 +6,7 @@ import createWaifu, { CreateWaifu } from "~/libs/createWaifu";
 describe("createWaifu", () => {
   let input: CreateWaifu;
   let expected: Waifu;
+  let user: User;
 
   beforeEach(() => {
     input = {
@@ -13,6 +14,17 @@ describe("createWaifu", () => {
       series: "bar",
       description: "foobar",
       img: "https://example.org/foo.jpg",
+    };
+
+    user = {
+      id: "asdf-qwer-1234-5678",
+      username: "john",
+      email: "john@doe.com",
+      password: "hashed_123456",
+      points: 0,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      lastClaimedAt: new Date(),
     };
 
     expected = {
@@ -38,6 +50,14 @@ describe("createWaifu", () => {
 
     expect(prismaMock.waifu.create).toHaveBeenCalledWith({
       data: input,
+    });
+  });
+
+  test("should set ownerId if owner is provided", async () => {
+    await createWaifu({ ...input, owner: user });
+
+    expect(prismaMock.waifu.create).toHaveBeenCalledWith({
+      data: { ...input, ownerId: user.id },
     });
   });
 });
