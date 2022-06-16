@@ -119,10 +119,7 @@ function Layout({ children }: LayoutProps) {
           {children}
         </div>
         <Footer />
-        <LoadingIndicator />
-        <ScrollRestoration />
         <Scripts />
-        {process.env.NODE_ENV === "development" && <LiveReload />}
       </body>
     </html>
   );
@@ -174,6 +171,9 @@ export default function App() {
   return (
     <Layout>
       <Outlet />
+      <LoadingIndicator />
+      <ScrollRestoration />
+      {process.env.NODE_ENV === "development" && <LiveReload />}
     </Layout>
   );
 }
