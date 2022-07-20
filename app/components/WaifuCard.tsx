@@ -44,6 +44,3 @@ export default function WaifuCard({
     </div>
   );
 }
-WaifuCard.defaultProps = {
-  shouldAnimateOnLoad: false,
-};

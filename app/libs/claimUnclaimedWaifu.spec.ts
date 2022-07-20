@@ -1,11 +1,13 @@
 import { OwnerHistory, User, Waifu } from "@prisma/client";
 
-import { prismaMock } from "~/../tests/database";
 import claimUnclaimedWaifu from "~/libs/claimUnclaimedWaifu";
 import claimWaifu from "~/libs/claimWaifu";
+import prisma from "~/utils/db.server";
 
 vi.mock("~/libs/claimWaifu");
+vi.mock("~/utils/db.server");
 const claimWaifuMock = vi.mocked(claimWaifu);
+const prismaMock = vi.mocked(prisma, true);
 
 describe("claimUnclaimedWaifu", () => {
   const user: User = {

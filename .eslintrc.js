@@ -65,6 +65,13 @@ module.exports = {
         depth: 3,
       },
     ],
+    // use default args instead of defaultProps for optional props
+    "react/require-default-props": [
+      "error",
+      {
+        functions: "defaultArguments",
+      },
+    ],
     // allow continue in loops
     "no-continue": "off",
   },

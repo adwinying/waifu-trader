@@ -2,7 +2,7 @@ type Props = {
   className?: string;
 };
 
-function GemIcon({ className }: Props) {
+function GemIcon({ className = "" }: Props) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -14,9 +14,5 @@ function GemIcon({ className }: Props) {
     </svg>
   );
 }
-
-GemIcon.defaultProps = {
-  className: "",
-};
 
 export default GemIcon;

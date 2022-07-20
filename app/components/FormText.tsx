@@ -11,11 +11,11 @@ type Props = {
 function FormText({
   label,
   name,
-  type,
-  placeholder,
-  defaultValue,
-  disabled,
-  errors,
+  type = "text",
+  placeholder = "",
+  defaultValue = "",
+  disabled = false,
+  errors = [],
 }: Props) {
   return (
     <div className="form-control">
@@ -44,13 +44,5 @@ function FormText({
     </div>
   );
 }
-
-FormText.defaultProps = {
-  type: "text",
-  defaultValue: "",
-  placeholder: "",
-  disabled: false,
-  errors: [],
-};
 
 export default FormText;
