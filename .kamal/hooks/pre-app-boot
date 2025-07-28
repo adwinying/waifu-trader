@@ -1,0 +1,4 @@
+#!/bin/sh
+
+echo "Booting app version $KAMAL_VERSION on $KAMAL_HOSTS..."
+kamal app exec "npx prisma migrate deploy"
