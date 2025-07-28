@@ -25,18 +25,34 @@ jobs:
       run: npm test
 
   deploy:
-    name: Deploy to Fly
+    name: Deploy
     runs-on: ubuntu-latest
     needs: [unit_test]
     if: github.ref == 'refs/heads/master'
-    env:
-      FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+    permissions:
+      packages: write
     steps:
     - name: Checkout source code
       uses: actions/checkout@v2
 
-    - name: Setup flyctl
-      uses: superfly/flyctl-actions/setup-flyctl@master
+    - name: Install tools
+      uses: jdx/mise-action@v2
 
-    - name: Deploy to fly
-      run: flyctl deploy --remote-only
+    - name: Set up Docker Buildx for cache
+      uses: docker/setup-buildx-action@v3
+
+    - name: Expose GitHub Runtime for cache
+      uses: crazy-max/ghaction-github-runtime@v3
+
+    - name: Set up Tailscale
+      uses: tailscale/github-action@v3
+      with:
+        oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+        oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+        tags: tag:deploy
+
+    - name: Build, push and deploy
+      run: kamal deploy
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
