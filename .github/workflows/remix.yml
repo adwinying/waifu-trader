@@ -11,12 +11,8 @@ jobs:
     - name: Checkout source code
       uses: actions/checkout@v2
 
-    - name: Setup Node.js environment
-      uses: actions/setup-node@v3
-      with:
-        node-version-file: '.nvmrc'
-        cache: 'npm'
-        check-latest: true
+    - name: Install tools
+      uses: jdx/mise-action@v2
 
     - name: Install node dependencies
       run: npm ci
