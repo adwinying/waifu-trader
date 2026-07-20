@@ -2,6 +2,7 @@
 "gem:kamal" = "latest"
 node = "16"
 "npm:figlet" = "latest"
+ruby = "latest"
 
 [hooks]
 enter = """

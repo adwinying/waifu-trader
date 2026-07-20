@@ -2,7 +2,7 @@
 service: waifu-trader
 
 # Name of the container image.
-image: ghcr.io/adwinying/waifu-trader
+image: adwinying/waifu-trader
 
 # Deploy to these servers.
 servers:
