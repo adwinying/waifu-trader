@@ -56,4 +56,4 @@ COPY --from=build /app/public /app/public
 ADD . .
 
 LABEL org.opencontainers.image.source=https://github.com/adwinying/waifu-trader
-CMD ["npm", "run", "start"]
+CMD ["sh", "-c", "npx prisma migrate deploy && npm run start"]
